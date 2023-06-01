@@ -12,7 +12,7 @@ import {
   
   export default function Example() {
     return (
-      <div className="w-full h-full mt-10 bg-blue-gray-500">
+      <div className="w-full h-full mt-10 bg-blue-gray-300">
         <p className=" text-3xl">TOP COURSES </p>
       <div className="flex  items-center mt-11 justify-center">
        
@@ -64,7 +64,10 @@ import {
           <Button>Read More</Button>
         </CardFooter>
       </Card>
+     
       </div>
+      <div>
+      <Button className="inline-block mt-9">login with tutor</Button></div>
       </div>
     );
   }

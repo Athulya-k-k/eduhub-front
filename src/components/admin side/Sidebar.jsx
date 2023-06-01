@@ -1,3 +1,5 @@
+import { RxDashboard } from "react-icons/rx"
+
 import { Link } from "react-router-dom";
 import {
     Card,
@@ -5,8 +7,6 @@ import {
     List,
     ListItem,
     ListItemPrefix,
-    ListItemSuffix,
-    Chip,
   } from "@material-tailwind/react";
   import {
     PresentationChartBarIcon,
@@ -28,7 +28,7 @@ import {
         <List>
           <ListItem>
             <ListItemPrefix>
-              <PresentationChartBarIcon className="h-5 w-5" />
+              <RxDashboard className="h-5 w-5" />
             </ListItemPrefix>
             Dashboard
           </ListItem>
@@ -43,9 +43,7 @@ import {
               <InboxIcon className="h-5 w-5" />
             </ListItemPrefix>
             STUDENTS
-            <ListItemSuffix>
-              <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
-            </ListItemSuffix>
+           
           </ListItem>
           <ListItem>
             <ListItemPrefix>
