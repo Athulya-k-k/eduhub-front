@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
-import { BASE_URL } from "../../utils/config";
+// import { BASE_URL } from "../../utils/axios";
 import register from "../../images/register.png";
-import axios from "axios";
-
+import instance from '../../utils/axios';
 
 function Register() {
 
@@ -58,7 +57,7 @@ function Register() {
     }
   
     try {
-      const response = await axios.post(`${BASE_URL}/api/register/`, {
+      const response = await instance.post('/api/register/', {
         first_name,
         last_name,
         email,

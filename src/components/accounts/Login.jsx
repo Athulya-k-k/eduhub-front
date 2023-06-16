@@ -1,45 +1,65 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
-import { BASE_URL } from "../../utils/config";
+import { BASE_URL } from "../../utils/axios";
 import axios from 'axios'
 import login,{getLocal} from "../../helpers/auth";
 import Loginimage from "../../images/login.png";
-import jwt_decoded from 'jwt-decode'
+import jwt_decode from 'jwt-decode'
+import { useEffect } from 'react'
+
 
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const response = getLocal()
   const history = useNavigate()
+  const location = useLocation()
 
-  
-const handleSubmit = async(e)=>{       //prevent form refresh
-  e.preventDefault()
-  const form = new FormData()
-  form.append('email', email)
-  form.append('password', password)
-  // let response = await axios.post(`${BASE_URL}/api/token/`, form)
-  const login_response = await login(email, password)
-  console.log(login_response);
+  let state = location.state
 
-
-
-if(login_response){
-  const decoded = jwt_decoded(login_response.access )
-  
-      if (decoded.is_tutor){
-        history('/tutorhome')
+  useEffect(() => {
+      if (response) {
+          history('/')
       }
-      else if (decoded.is_admin){
-        history('/adminhome')
-      }else{
-        history('/')
+      if (state?.msg){
+        toast.success(state?.msg)
+        history(state=>({...state,msg:null}))
       }
+  })
 
-    toast.success('Login Success')
-}
-}
+  const handleSubmit = async (e) => {
+      e.preventDefault()
+      const login_response = await login(email,password);
+      console.log(login_response, 'log response');
+     
+     
+    
+
+      const local_response = getLocal('authToken');
+      // console.log(local_response, 'from local storage');
+      if (local_response) {
+          const location = localStorage.getItem('location')
+          const decoded = jwt_decode(local_response)
+          console.log(decoded, 'decoded in login page');
+          if (decoded.is_admin) {
+              history('/dashboard')
+          } else if (decoded.is_staff) {
+              console.log('staff');
+              history('/')
+          } else if (location) {
+              history(location, { replace: true })
+              localStorage.removeItem('location')
+          } else {
+              history('/', { replace: true })
+          }
+      } else {
+          toast.error('Invalid User Credentials')
+      }
+  }
+
 
   return (
     <div className="bg-gradient-to-br from-f6c2f9 to-819ff9 h-screen w-screen flex items-center justify-center">
