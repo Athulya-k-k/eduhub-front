@@ -1,11 +1,11 @@
 import React from 'react'
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-
+import profile from '../../../images/avatar.jpg'
 import instance from '../../../utils/axios';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
-import NavBar from '../../user side/navbar/Navbar';
+
 import { details } from '../../../utils/axios'
 
 import {
@@ -74,7 +74,7 @@ export default function SingleCourse() {
     <div className='h-full w-full font-poppins'>
         <Toaster position='top-center' reverseOrder='false' ></Toaster>
         <div className="w-full h-80  bg-red-200">
-            <NavBar/>
+          
             <div className="w-full h-full py-5  flex  place-content-start px-14">
                 <div className='w-3/5 h-full pt-5 flex flex-col gap-5  place-content-start'>
                     <h2 className='text-4xl text-black font-bold '>{SingleCourse.title}</h2>
@@ -136,7 +136,7 @@ export default function SingleCourse() {
                             <div className="w-full rounded-xl bg-gray-100 p-5">
                                 <div className="flex place-items-center">
                                     <div className="w-20">
-                                        <img className='w-14 h-14 rounded-3xl'  src="/avatar1.avif" alt="tutor_profile" />
+                                        <img src={profile} alt="tutor_profile" />  
                                     </div>
                                     <div className="flex flex-col gap-3 place-content-start">
                                         <h1 className='flex gap-3 font-poppins text-xl font-semibold text-black'>

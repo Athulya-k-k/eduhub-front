@@ -1,30 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from './Sidebar';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import instance, { BASE_URL } from '../../utils/axios';
-import Pagination from '../Pagination';
-import axios from 'axios';
-import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import React, { useState, useEffect } from "react";
+import Sidebar from "./Sidebar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import instance from "../../utils/axios";
+import Pagination from "../Pagination";
+import { Link } from "react-router-dom";
+import { AiFillEye } from 'react-icons/ai';
+import Switch from "react-switch";
+
 
 function Course() {
   const [courses, setCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(2);
-  
-  const [open, setOpen] = useState(false);
-  const [selectedCourseId, setSelectedCourseId] = useState(null);
- 
-  const handleOpen = (id) => {
-    setSelectedCourseId(id);
-    setOpen(true);
-  };
 
   useEffect(() => {
     getCourses();
@@ -32,37 +20,45 @@ function Course() {
 
   const getCourses = async () => {
     try {
-      const response = await instance.get('courses/course/');
+      const response = await instance.get("courses/course/");
       setCourses(response.data);
     } catch (error) {
-      toast.error('Failed to fetch courses');
+      toast.error("Failed to fetch courses");
     }
-  };
-
-  const deleteCourse = async (id) => {
-    try {
-      const response = await axios.delete(`${BASE_URL}courses/delete-course/${id}`);
-      getCourses();
-      toast.success('Course deleted successfully');
-      handleClose();
-    } catch (error) {
-      toast.error('Failed to delete the course');
-    }
-  };
-
-  const handleClose = () => {
-    setSelectedCourseId(null);
-    setOpen(false);
   };
 
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentCourses = courses.slice(firstPostIndex, lastPostIndex);
 
+  const handleChange = (id) => {
+    instance.get(`courses/blockcourse/${id}`).then(() => getCourses());
+  };
+
+  async function handleSearch(keyword) {
+    const response = await instance.get(
+      `courses/adminsearchcourse/?search=${keyword}`
+    );
+    setCourses(response.data);
+  }
+
+  const options = [
+    { value: 0, label: "All" },
+    { value: 1, label: "Approved" },
+    { value: 2, label: "Pending" },
+  ];
+
+  const handleFilter = async (option) => {
+    const response = await instance.get(
+      `courses/adminfiltercourse/${option.value}`
+    );
+    setCourses(response.data);
+  };
+
   return (
     <div className="flex h-full bg-acontent">
       <Sidebar />
-      
+
       <div className="px-5 w-full h-auto min-h-screen mx-5 mt-2 py-8 font-poppins flex flex-col place-content-start place-items-center bg-white shadow-xl rounded-xl">
         <div className="w-full h-screen px-3 font-poppins">
           <div className="w-full p-5">
@@ -89,6 +85,9 @@ function Course() {
                     Short Description
                   </th>
                   <th scope="col" className="px-6 py-4 font-large text-gray-900">
+                    Status
+                  </th>
+                  <th scope="col" className="px-6 py-4 font-large text-gray-900">
                     Actions
                   </th>
                 </tr>
@@ -101,7 +100,7 @@ function Course() {
                     </td>
                     <td className="px-6 py-4">
                       <p>
-                        <img src={course.image} alt={course.title} />
+                        <img className="w-full h-full" src={course.image} alt={course.title} />
                       </p>
                     </td>
                     <td className="px-6 py-4">
@@ -110,10 +109,30 @@ function Course() {
                     <td className="px-6 py-4">
                       <p>{course.subtitle}</p>
                     </td>
-                    <td className="px-6 py-4">
-                      <Button  onClick={() => handleOpen(course.id)} variant="gradient">
-                        Delete
-                      </Button>
+
+                    {course.is_approved ? (
+                      <td className="approved">Approved</td>
+                    ) : course.is_rejected ? (
+                      <td className="pending">Rejected</td>
+                    ) : (
+                      <td className="pending">Pending</td>
+                    )}
+                    <td className="action-col">
+            
+                    
+                      <Link className='action-text' to={`/detailedcourse/${course?.id}`} ><p className='edit'><AiFillEye /> View</p></Link>
+                      <Switch
+    onChange={() => handleChange(course.id)}
+    checked={course.is_approved}
+    onColor="#86d3ff"
+    onHandleColor="#2693e6"
+    offColor="#ccc"
+    offHandleColor="#fff"
+    height={24}
+    width={48}
+    checkedIcon={false}
+    uncheckedIcon={false}
+  />
                     </td>
                   </tr>
                 ))}
@@ -128,27 +147,6 @@ function Course() {
           />
         </div>
       </div>
-
-      <Dialog open={open} onClose={handleClose}>
-        <DialogHeader>Confirmation</DialogHeader>
-        <DialogBody divider>
-          Are you sure you want to delete this course?
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleClose}
-            className="mr-1"
-          >
-            Cancel
-          </Button>
-          <Button variant="gradient" color="green" onClick={() => deleteCourse(selectedCourseId)}>
-            Confirm
-          </Button>
-        </DialogFooter>
-      </Dialog>
-
       <ToastContainer position="top-center" />
     </div>
   );

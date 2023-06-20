@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 
 function TutorForm() {
-    // const [name, setName] = useState('');
-  
+   
     const [subject, setSubject] =useState('');
     const[qualification,setQualification]=useState('');
     const[experience,setExperience]=useState('');
+    const[name,setName]=useState('');
    
   
 
@@ -26,7 +26,7 @@ function TutorForm() {
     const user_id = decoded.user_id
     const form = new FormData()
 
-    // form.append('name',name)
+    form.append('name',name)
     form.append('user', user_id)
     form.append('subject',subject)
     form.append('qualification',qualification)
@@ -41,7 +41,7 @@ function TutorForm() {
 
       if (response.status === 200) {
         toast.success("Tutor registration successful!");
-        navigate('/dashboard');
+        navigate('/dashboards');
       } else {
         toast.error("Something went wrong");
       }
@@ -64,14 +64,14 @@ function TutorForm() {
           <h1 className="text-2xl font-bold mb-4">WELCOME TUTOR</h1>
 
           <form onSubmit={handleSubmit}>
-            {/* <input
+            <input
               className="  h-9 w-6/12 border-2 rounded-full mt-5 bg-transparent  outline-none text-black  px-6 mr-6"
               type="text"
               name="name"
               placeholder="  name"
            required
               onChange={e =>setName(e.target.value)}
-            /> */}
+            />
 
 
             <input

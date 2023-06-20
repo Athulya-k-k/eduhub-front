@@ -17,6 +17,9 @@ import Courses from './components/admin/Courses'
 import Dashboards from "./components/tutor/Dashboards";
 import Coursetutor from './components/tutor/Coursetutor'
 import CreateCourse from './components/tutor/CreateCourse'
+import DetailedCourse from './components/admin/DetailedCourse'
+import SingleCourses from "./components/admin/DetailedCourse";
+import CategoryTutor from './components/tutor/CategoryTutor'
 
 function App() {
   return (
@@ -38,8 +41,10 @@ function App() {
           <Route path='/courses' Component={Courses} />
           <Route path='/dashboards' Component={Dashboards} />
           <Route path='/coursetutor' Component={Coursetutor} />
-          <Route path='/createcourse' Component={CreateCourse}/>
-       
+          <Route path='/createcourse' Component={CreateCourse}/>   
+          <Route path='/detailedcourse/:id' exact Component={SingleCourses}/>
+          <Route path='/categorytutor' Component={CategoryTutor}/>
+          
         
         </Routes>
       </Router>

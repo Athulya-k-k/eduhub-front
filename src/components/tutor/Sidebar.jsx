@@ -47,10 +47,10 @@ export default function Sidebar() {
                 <h3 className='font-semibold'>Reviews</h3>
             </NavLink>
           
-            <NavLink to="#" className={({isActive})=>(isActive ? 'bg-cards rounded-xl flex place-items-center text-black my-2' : 'flex place-items-center bg-white-10 my-2')}>
-                <HiOutlineDocumentText size={50} className='px-3'></HiOutlineDocumentText>
-                <h3 className='font-semibold'>Category</h3>
-            </NavLink>
+            <NavLink to="/categorytutor" className={({isActive})=>(isActive ? 'bg-cards rounded-xl flex place-items-center text-black my-2' : 'flex place-items-center bg-white-10 my-2')}>
+  <HiOutlineDocumentText size={50} className='px-3'></HiOutlineDocumentText>
+  <h3 className='font-semibold'>Category</h3>
+</NavLink>
 
             <div className="flex place-items-center h-10 my-2 cursor-pointer" onClick={()=>{adminLogout()}}>
                 <CiLogout size={50} className='px-3 text-primaryBlue'></CiLogout>

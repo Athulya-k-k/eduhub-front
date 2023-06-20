@@ -45,11 +45,15 @@ function Course() {
       } else if (selectedCategory && !showAllCourses) {
         // Filter courses based on selected category
         const filteredCourses = allCourses.filter(course =>
-          course.category.name === selectedCategory
+          course.category.name === selectedCategory && course.is_approved
         );
         setCourses(filteredCourses);
       } else {
-        setCourses(allCourses);
+        // Filter courses to only include approved courses
+        const filteredCourses = allCourses.filter(course =>
+          course.is_approved
+        );
+        setCourses(filteredCourses);
       }
     }
 
@@ -78,7 +82,9 @@ function Course() {
 
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
-  const currentCourses = courses.slice(firstPostIndex, lastPostIndex);
+  const currentCourses = courses
+    .filter(course => course.is_approved) // Exclude pending courses
+    .slice(firstPostIndex, lastPostIndex);
 
   return (
     <div className='w-full h-full font-poppins relative'>

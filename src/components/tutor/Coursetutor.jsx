@@ -4,6 +4,7 @@ import axios, { formToJSON } from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import instance, { BASE_URL } from "../../utils/axios";
+import Pagination from '../Pagination';
 import {
   Button,
   Dialog,
@@ -21,7 +22,16 @@ function Coursetutor() {
   const [open, setOpen] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState([]);
   const [editMode, setEditMode] = useState(false);
-  const [editedCourse, setEditedCourse] = useState({});
+  const [editedCourse, setEditedCourse] = useState({
+    title: "",
+    subtitle: "",
+    description: "",
+    category: 0, // Assuming 0 is the default category value
+    image: null,
+    video: null,
+    price: 0, // Assuming 0 is the default price value
+    user: "" // Assuming an empty string is the default user value
+  })
   const [category, setCategory] = useState([]);
   
   const [student, setStudent] = useState([]);
@@ -32,25 +42,43 @@ function Coursetutor() {
     setOpen(true);
   };
 
-  const handleEdit = (course) => {
-    console.log(course.id, "not");
-    setSelectedCourseId(course.id);
-    setEditMode(true);
-    setEditedCourse({ ...course });
-    setOpen(true);
+ const handleEdit = (course) => {
+  setSelectedCourseId(course.id);
+  setEditMode(true);
+  setEditedCourse({
+    ...course,
+    category: course.category.id, // Extract the ID from the category object
+  });
+  setOpen(true);
+};
+
+
+  const handleCategoryChange = (event) => {
+    const categoryId = parseInt(event.target.value); // Convert the value to an integer
+    setEditedCourse({
+      ...editedCourse,
+      category: categoryId,
+    });
   };
 
   const handleInputChange = (event) => {
-    if (event.target.name === "image") {
+    if (event.target.name === "image" || event.target.name === "video"
+    ) {
       setEditedCourse({
         ...editedCourse,
         [event.target.name]: event.target.files[0],
       });
-    } else {
+    } else if(event.target.name === "category"){
+      const categoryId = parseInt(event.target.value);
+      setEditedCourse({
+        ...editedCourse,
+        [event.target.name]: categoryId,
+      });
+    }else{
       setEditedCourse({
         ...editedCourse,
         [event.target.name]: event.target.value,
-      });
+      })
     }
   };
 
@@ -65,7 +93,7 @@ function Coursetutor() {
       formData.append("image", editedCourse.image);
       formData.append("video", editedCourse.video);
       formData.append("price", editedCourse.price);
-
+    
       await updateCourse(selectedCourseId, formData);
     } catch (error) {
       toast.error("Failed to save the course");
@@ -76,7 +104,12 @@ function Coursetutor() {
     try {
       const response = await axios.put(
         `${BASE_URL}courses/update-course/${id}`,
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       getCourses();
       toast.success("Course updated successfully");
@@ -85,6 +118,7 @@ function Coursetutor() {
       toast.error("Failed to update the course");
     }
   };
+
 
   const deleteCourse = async (id) => {
     try {
@@ -135,7 +169,7 @@ function Coursetutor() {
       toast.error("Failed to fetch cat");
     }
   };
-  console.log(category);
+  // console.log(category);
 
   async function getStudent() {
     const response = await instance.get("api/users/");
@@ -153,7 +187,9 @@ function Coursetutor() {
     // console.log(response);
   };
 
-
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentCourses = courses.slice(firstPostIndex, lastPostIndex);
   return (
     <div className="flex h-full bg-acontent">
       <Sidebar />
@@ -204,7 +240,7 @@ function Coursetutor() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-                {courses.map((course) => (
+                {currentCourses.map((course) => (
                   <tr className="hover:bg-gray-50" key={course.id}>
                     <td className="px-6 py-4">
                       <p>{course.title}</p>
@@ -225,16 +261,16 @@ function Coursetutor() {
                       <p>{course.subtitle}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <Button
+                      <Button className="bg-red-400 "
                         onClick={() => handleOpen(course.id)}
-                        variant="gradient"
+                      
                       >
                         Delete
                       </Button>
-                      <Button
+                      <Button 
                         onClick={() => handleEdit(course)}
-                        variant="gradient"
-                        className="ml-2 "
+                       
+                        className="ml-2 bg-green-400"
                       >
                         Edit
                       </Button>
@@ -245,7 +281,14 @@ function Coursetutor() {
             </table>
           </div>
         </div>
+        <Pagination
+            totalPosts={courses.length}
+            postsPerPage={postsPerPage}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+          />
       </div>
+      
       <Dialog open={open} onClose={handleClose}>
         <DialogHeader>{editMode ? "Edit Course" : "Confirmation"}</DialogHeader>
         <DialogBody divider>
@@ -285,12 +328,14 @@ function Coursetutor() {
               <label className="text-gray-600">category</label>
 
               <select
-                value={editedCourse.category}
-                onChange={handleInputChange}
+                value={editedCourse.category.id}
+                onChange={handleCategoryChange}
                 name="category"
               >
                 {category.map((category) => (
-                  <option value={category.id}>{category.name}</option>
+      <option value={category.id} key={category.name}>
+        {category.name}
+      </option>
                 ))}
               </select>
 
@@ -326,6 +371,7 @@ function Coursetutor() {
             "Are you sure you want to delete this course?"
           )}
         </DialogBody>
+        
         <DialogFooter>
           <Button
             variant="text"
@@ -351,6 +397,7 @@ function Coursetutor() {
         </DialogFooter>
       </Dialog>
       <ToastContainer position="top-center" />
+     
     </div>
   );
 }

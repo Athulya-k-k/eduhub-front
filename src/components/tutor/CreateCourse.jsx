@@ -1,76 +1,165 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import jwtDecode from "jwt-decode";
+import { getLocal } from "../../helpers/auth";
+import { toast, Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import instance from "../../utils/axios";
 
-function CourseForm() {
-  const [courseName, setCourseName] = useState('');
-  const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
+function AddCourseForm() {
+  const [user, setUser] = useState(null);
+  const [course, setCourse] = useState("");
+  const [category, setCategory] = useState(null);
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(null);
+
+  const [image, setImage] = useState(null);
+  const [video, setVideo] = useState(null);
+  const [categoryList, setCategorylist] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function categories() {
+      const response = await instance.get(`courses/category/`);
+      setCategorylist(response.data);
+    }
+    categories();
+    const user = getLocal();
+    const data = jwtDecode(user);
+    setUser(data.user_id);
+    console.log(user);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create a new course object
-    const course = {
-      courseName,
-      category,
-      description
-    };
+    const form = new FormData();
+    form.append("user", user);
+    form.append("course", course);
+    form.append("category", category);
+    form.append("title", title);
+    form.append("subtitle", subtitle);
+    form.append("description", description);
+    form.append("price", price);
+    form.append("image", image); // Append the image file directly
+    form.append("video", video); // Append the video file directly
 
-    try {
-      // Send a POST request to the server to create the course
-      const response = await axios.post('/api/courses', course);
-      console.log('Course created:', response.data);
-      // Reset the form fields
-      setCourseName('');
-      setCategory('');
-      setDescription('');
-    } catch (error) {
-      console.error('Error creating course:', error);
+    console.log(image);
+    const res = await instance({
+      method: "post",
+      url: `courses/createcourse/`,
+      data: form,
+      headers: {
+        "Content-Type": "multipart/form-data", // Set the correct content type header
+      },
+    });
+    console.log(res);
+    if (res.status === 201) {
+      toast.success("course added");
+      navigate("/coursetutor");
+    } else {
+      toast.error(res.statusText);
     }
   };
 
   return (
-    <div>
-      <h1>Create a Course</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="courseName">Course Name:</label>
+    <div className="bg-gradient-to-br  h-screen w-screen flex items-center justify-center">
+      <Toaster position="top-center" reverseOrder={false}></Toaster>
+
+     
+     
+
+        <form className="w-full mx-auto flex flex-col justify-center items-center" onSubmit={handleSubmit} encType="multipart/formdata">
+        <h1 className="font-bold text-2xl block">CREATE COURSE </h1>
           <input
+            className=" bg-white h-14 w-5/12 border-2  mt-5 placeholder-black  outline-none text-black  px-6 block"
             type="text"
-            id="courseName"
-            value={courseName}
-            onChange={(e) => setCourseName(e.target.value)}
+            name="course"
+            placeholder=" coursename"
+            onChange={(e) => setCourse(e.target.value)}
             required
           />
-        </div>
-        <div>
-          <label htmlFor="category">Category:</label>
+
+          <input
+            className=" bg-white  h-14 w-5/12 border-2 mt-5 placeholder-black outline-none text-black  px-6 block"
+            type="text"
+            name="title"
+            placeholder=" titlename"
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+           <input
+            className=" bg-white  h-14 w-5/12 border-2 mt-5 placeholder-black outline-none text-black  px-6 block"
+            type="text"
+            name="title"
+            placeholder=" titlename"
+            onChange={(e) => setSubtitle(e.target.value)}
+            required
+          />
+
+          <input
+            className=" bg-white h-14 w-5/12 border-2  mt-5 placeholder-black  outline-none text-black  px-6 block"
+            type="text"
+            name="description"
+            placeholder=" description"
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+
           <select
-            id="category"
-            value={category}
+            className=" bg-white  h-14 w-5/12 border-2 mt-5 placeholder-black  outline-none text-black  px-6 block"
+            type="text"
+            name="category"
+            placeholder=" category"
             onChange={(e) => setCategory(e.target.value)}
             required
           >
-            <option value="">Select a category</option>
-            <option value="category1">Category 1</option>
-            <option value="category2">Category 2</option>
-            <option value="category3">Category 3</option>
-            {/* Add more options for your categories */}
+            <option value="">Select category</option>
+            {categoryList.map((category) => (
+              <option value={category.id}>{category.name}</option>
+              
+            ))}
           </select>
-        </div>
-        <div>
-          <label htmlFor="description">Description:</label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+
+          <input
+            className=" bg-white  h-14 w-5/12 border-2  mt-5 placeholder-black  outline-none text-black  px-6 block"
+            type="number"
+            name="price"
+            placeholder=" price"
+            onChange={(e) => setPrice(e.target.value)}
             required
-          ></textarea>
-        </div>
-        <button type="submit">Create</button>
-      </form>
+          />
+
+          <input
+            className=" bg-white  h-14 w-5/12 border-2  mt-5 placeholder-black  outline-none text-black  px-6 block"
+            type="file"
+            name="image"
+            placeholder=" image"
+            onChange={(e) => setImage(e.target.files[0])}
+            required
+          />
+
+          <input
+            className=" bg-white h-14 w-5/12 border-2  mt-5 placeholder-black  outline-none text-black  px-6 block"
+            type="file"
+            id="video"
+            name="video"
+            placeholder=" video"
+            onChange={(e) => setVideo(e.target.files[0])}
+            required
+          />
+
+          <input
+            className="bg-custom-red mt-6 h-7 w-5/12  text-white"
+            type="submit"
+            value="create"
+          />
+        </form>
+      
     </div>
   );
 }
 
-export default CourseForm;
+export default AddCourseForm;
