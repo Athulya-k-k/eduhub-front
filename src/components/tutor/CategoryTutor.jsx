@@ -4,7 +4,8 @@ import { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import instance from "../../utils/axios";
 import axios from 'axios';
-import {ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 import { BASE_URL } from '../../utils/axios';
 import {
   Button,
@@ -15,153 +16,131 @@ import {
 } from "@material-tailwind/react";
 
 function Categories() {
-    const [category, setCategory] = useState([]);
-   
+  const [category, setCategory] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const navigate = useNavigate();
 
-//   useEffect(() => {
-//     async function getCategory() {
-//       const response = await instance.get('courses/category/');
-//       setCategory(response.data);
-//     }
-//     getCategory();
-//   }, []);
-
-
-
-const [open, setOpen] = useState(false);
-const [selectedCategoryName, setSelectedCategoryName] = useState(null);
-
-const handleOpen = (id) => {
-  setSelectedCategoryName(id);
-  setOpen(true);
-};
-
-useEffect(() => {
-  getCategory();
-}, []);
-
-const getCategory = async () => {
-  try {
-    const response = await instance.get('courses/category/');
-    setCategory(response.data);
-  } catch (error) {
-    toast.error('Failed to fetch cat');
-  }
-};
-console.log(category);
-
-
-const handleEdit = (course) => {
-    setSelectedCourseId(course.id);
-    setEditMode(true);
-    setEditedCourse({
-      ...course,
-      category: course.category.id, // Extract the ID from the category object
-    });
+  const handleOpen = (category) => {
+    setSelectedCategory(category);
     setOpen(true);
   };
 
+  useEffect(() => {
+    getCategory();
+  }, []);
 
-
-const updateCourse = async (id, formData) => {
+  const getCategory = async () => {
     try {
-      const response = await axios.put(
-        `${BASE_URL}courses/update-course/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      getCategory();
-      toast.success("Course updated successfully");
-      handleClose();
+      const response = await instance.get('courses/category/');
+      setCategory(response.data);
     } catch (error) {
-      toast.error("Failed to update the course");
+      toast.error('Failed to fetch categories');
     }
   };
 
 
+  const deleteCategory = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}courses/delete-category/${id}`
+      );
+      getCategory();
+      toast.success("Course deleted successfully");
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to delete the course");
+    }
+  };
 
-const deleteCategory = async (id) => {
-  console.log(id);
-  try {
+  const handleClose = () => {
+    setSelectedCategory(null);
+    setOpen(false);
+  };
 
-    const response = await axios.delete(`${BASE_URL}courses/delete-category/${id}`);
-    getCategory();
-    toast.success('Course deleted successfully');
-    handleClose();
-  } catch (error) {
-    toast.error('Failed to delete the course');
-  }
-};
+  const handleEdit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("name", selectedCategory.name);
+      formData.append("description", selectedCategory.description);
+      formData.append("image", selectedCategory.image);
 
-const handleClose = () => {
-  setSelectedCategoryName(null);
-  setOpen(false);
-};
+      const response = await axios.put(`${BASE_URL}courses/update-category/${selectedCategory.id}`, formData);
 
- 
-  
- 
+      if (response.status === 200) {
+        toast.success('Category updated successfully');
+        getCategory();
+        handleClose();
+      } else {
+        toast.error('Failed to update category');
+      }
+    } catch (error) {
+      toast.error('Failed to update category');
+    }
+  };
+
   return (
     <div className="flex h-full bg-acontent">
       <Sidebar />
       <div className="px-5 w-full h-auto min-h-screen mx-5 mt-2  py-8 font-poppins flex flex-col place-content-start place-items-center bg-white shadow-xl rounded-xl">
         <div className="w-full h-screen px-3 font-poppins">
-          <Toaster position="top-center" reverseOrder="false"></Toaster>
-         
-          <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-            <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-              <thead class="bg-gray-50">
+          <div className="w-full p-5">
+            <Button
+              className="bg-blue-gray-900 float-right"
+              onClick={() => navigate("/createcategory")}
+            >
+              Create Category
+            </Button>
+          </div>
+          <Toaster position="top-center" reverseOrder={false}></Toaster>
+          <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+            <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
+              <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" class="px-6 py-4 font-large text-gray-900">
+                  <th scope="col" className="px-6 py-4 font-large text-gray-900">
                     Name
                   </th>
-                  <th scope="col" class="px-6 py-4 font-large text-gray-900">
-                    course image
+                  <th scope="col" className="px-6 py-4 font-large text-gray-900">
+                    Course Image
                   </th>
-
-                  <th scope="col" class="px-6 py-4 font-large text-gray-900">
-                    description
+                  <th scope="col" className="px-6 py-4 font-large text-gray-900">
+                    Description
                   </th>
                   <th scope="col" className="px-6 py-4 font-large text-gray-900">
                     Actions
                   </th>
-                 
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+              <tbody className="divide-y divide-gray-100 border-t border-gray-100">
                 {category.map((category) => (
-                  <tr class="hover:bg-gray-50" key={category.id}>
-                    <td class="px-6 py-4">
+                  <tr className="hover:bg-gray-50" key={category.id}>
+                    <td className="px-6 py-4">
                       <p>{category.name}</p>
                     </td>
-                    <td class="px-6 py-4">
+                    <td className="px-6 py-4">
                       <p>
-                        <img className="w-4/5 h-24" src={category.image} />
+                        <img className="w-4/5 h-24" src={category.image} alt={category.name} />
                       </p>
                     </td>
-
-                     { <td class="px-6 py-4">
-                      <p>{category.description}</p>
-                    </td> }
-
-                    <td class="px-6 py-4">
-                      <p>{category.subtitle}</p>
-                    </td> 
                     <td className="px-6 py-4">
-                      <Button  onClick={() => handleOpen(category.id)} variant="gradient">
-                        Delete
-                      </Button>
-                      <Button 
-                        onClick={() => handleEdit(category)}
-                       
-                        className="ml-2 bg-green-400"
-                      >
-                        Edit
-                      </Button>
+                      <p>{category.description}</p>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex space-x-2">
+                        <Button
+                          onClick={() => handleOpen(category)}
+                          variant="gradient"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onClick={() => deleteCategory(category)}
+                          variant="gradient"
+                         
+                        >
+                          Delete
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -171,9 +150,44 @@ const handleClose = () => {
         </div>
       </div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogHeader>Confirmation</DialogHeader>
-        <DialogBody divider>
-          Are you sure you want to delete this course?
+        <DialogHeader>Edit Category</DialogHeader>
+        <DialogBody>
+          <label className="text-gray-700">Name:</label>
+          <input
+            className="border border-gray-300 p-2 mt-1 w-full"
+            type="text"
+            value={selectedCategory?.name || ""}
+            onChange={(e) =>
+              setSelectedCategory((prevCategory) => ({
+                ...prevCategory,
+                name: e.target.value,
+              }))
+            }
+          />
+          <label className="text-gray-700 mt-3">Description:</label>
+          <input
+            className="border border-gray-300 p-2 mt-1 w-full"
+            type="text"
+            value={selectedCategory?.description || ""}
+            onChange={(e) =>
+              setSelectedCategory((prevCategory) => ({
+                ...prevCategory,
+                description: e.target.value,
+              }))
+            }
+          />
+          <label className="text-gray-700 mt-3">Image:</label>
+          <input
+            className="border border-gray-300 p-2 mt-1 w-full"
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setSelectedCategory((prevCategory) => ({
+                ...prevCategory,
+                image: e.target.files[0],
+              }))
+            }
+          />
         </DialogBody>
         <DialogFooter>
           <Button
@@ -184,12 +198,15 @@ const handleClose = () => {
           >
             Cancel
           </Button>
-          <Button variant="gradient" color="green" onClick={() => deleteCategory(selectedCategoryName)}>
-            Confirm
+          <Button
+            variant="gradient"
+            color="green"
+            onClick={handleEdit}
+          >
+            Save
           </Button>
         </DialogFooter>
       </Dialog>
-
       <ToastContainer position="top-center" />
     </div>
   );

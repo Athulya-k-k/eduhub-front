@@ -27,7 +27,7 @@ function Tutor() {
 
   const blockTutor = async (tutorId) => {
     try {
-      await instance.put(`tutor/tutors/${tutorId}/block/`);
+      await instance.put(`tutor/block/${tutorId}/`);
       // Perform necessary actions after successful blocking
     } catch (error) {
       // Handle error

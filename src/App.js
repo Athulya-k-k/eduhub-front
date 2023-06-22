@@ -20,6 +20,8 @@ import CreateCourse from './components/tutor/CreateCourse'
 import DetailedCourse from './components/admin/DetailedCourse'
 import SingleCourses from "./components/admin/DetailedCourse";
 import CategoryTutor from './components/tutor/CategoryTutor'
+import CreateCategory from './components/tutor/CreateCategory'
+
 
 function App() {
   return (
@@ -44,6 +46,7 @@ function App() {
           <Route path='/createcourse' Component={CreateCourse}/>   
           <Route path='/detailedcourse/:id' exact Component={SingleCourses}/>
           <Route path='/categorytutor' Component={CategoryTutor}/>
+          <Route path='/createcategory' Component={CreateCategory}/>
           
         
         </Routes>

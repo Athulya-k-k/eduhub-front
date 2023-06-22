@@ -54,7 +54,7 @@ const deleteCategory = async (id) => {
   console.log(id);
   try {
 
-    const response = await axios.delete(`${BASE_URL}courses/delete-category/${id}`);
+    const response = await axios.delete(`${BASE_URL}courses/delete-category/${id}/`);
     getCategory();
     toast.success('Course deleted successfully');
     handleClose();
