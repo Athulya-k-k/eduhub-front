@@ -62,7 +62,7 @@ function Login() {
 
 
   return (
-    <div className="bg-gradient-to-br from-f6c2f9 to-819ff9 h-screen w-screen flex items-center justify-center">
+    <div className=" h-screen w-screen flex items-center justify-center">
       <Toaster position="top-center" reverseOrder={false}/>
       {/* <div className=" h-5/6 w-10/12 flex flex-row bg-gradient-to-r from-yellow-50 to-pink-200 rounded-3xl"> */}
       <div className=" h-5/6 w-10/12 flex flex-row bg-gradient-to-r from-white  to-gray-300 rounded-3xl">

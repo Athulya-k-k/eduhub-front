@@ -8,7 +8,6 @@ import TutorHome from "./pages/tutor/TutorHome";
 import Course from './components/user side/course/Course'
 import CourseDetail from './components/user side/course/CourseDetail'
 import SingleCourse from "./components/user side/course/CourseDetail";
-import TutorSignup from "./components/tutor/Tutorsignup";
 import Dashboard from "./components/admin/Dashboard";
 import Student from "./components/admin/Student";
 import Tutor from "./components/admin/Tutor";
@@ -21,6 +20,8 @@ import DetailedCourse from './components/admin/DetailedCourse'
 import SingleCourses from "./components/admin/DetailedCourse";
 import CategoryTutor from './components/tutor/CategoryTutor'
 import CreateCategory from './components/tutor/CreateCategory'
+import Tutorregister from './components/tutor/Tutorregister'
+import LoginTutor from './components/tutor/LoginTutor'
 
 
 function App() {
@@ -35,7 +36,6 @@ function App() {
           <Route path='/tutorhome' exact Component={TutorHome} />
           <Route path='/course' exact Component={Course} />
           <Route path='/coursedetail/:id' exact Component={SingleCourse} />
-          <Route path='/tutorregister' Component={TutorSignup} />
           <Route path='/dashboard' Component={Dashboard} />
           <Route path='/student' Component={Student} />
           <Route path='/tutor' Component={Tutor} />
@@ -47,6 +47,8 @@ function App() {
           <Route path='/detailedcourse/:id' exact Component={SingleCourses}/>
           <Route path='/categorytutor' Component={CategoryTutor}/>
           <Route path='/createcategory' Component={CreateCategory}/>
+          <Route path='/tutorsignup' Component={Tutorregister}/>
+          <Route path='/tutorsignin' Component={LoginTutor}/>
           
         
         </Routes>

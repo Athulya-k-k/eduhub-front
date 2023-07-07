@@ -1,5 +1,5 @@
 
-
+import { Link } from 'react-router-dom';
 import imga from '../../../images/python.jpg'
 import java from "../../../images/java.jpg";
 import {
@@ -21,9 +21,11 @@ export default function Example() {
         <img src={imga} alt="profile-picture" className='object-cover h-full'/>
       </CardHeader>
       <CardBody className="text-center">
-        <Typography variant="h4" color="blue-gray" className="mb-2">
-        PYTHON
-        </Typography>
+      <Typography variant="h4" color="blue-gray" className="mb-2">
+  <Link to="#" className="text-blue-gray">
+    PYTHON
+  </Link>
+</Typography>
         <Typography color="blue" className="font-medium" textGradient>
              ₹ 499
         </Typography>
@@ -70,7 +72,9 @@ export default function Example() {
       </CardHeader>
       <CardBody className="text-center">
         <Typography variant="h4" color="blue-gray" className="mb-2">
-        REACT.JS
+        <Link to="#" className="text-blue-gray">
+    React.js
+  </Link>
         </Typography>
         <Typography color="blue" className="font-medium" textGradient>
              ₹ 499

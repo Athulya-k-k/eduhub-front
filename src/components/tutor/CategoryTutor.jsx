@@ -40,10 +40,11 @@ function Categories() {
   };
 
 
-  const deleteCategory = async (id) => {
+  const deleteCategory = async (cat_id) => {
+    console.log(cat_id);
     try {
-      const response = await axios.delete(
-        `${BASE_URL}courses/delete-category/${id}`
+      const response = await instance.delete(
+        `courses/delete-category/${cat_id}/`
       );
       getCategory();
       toast.success("Course deleted successfully");
@@ -52,6 +53,7 @@ function Categories() {
       toast.error("Failed to delete the course");
     }
   };
+
 
   const handleClose = () => {
     setSelectedCategory(null);
@@ -80,10 +82,10 @@ function Categories() {
   };
 
   return (
-    <div className="flex h-full bg-acontent">
+    <div className="flex h-full bg-acontent overflow-hidden">
       <Sidebar />
       <div className="px-5 w-full h-auto min-h-screen mx-5 mt-2  py-8 font-poppins flex flex-col place-content-start place-items-center bg-white shadow-xl rounded-xl">
-        <div className="w-full h-screen px-3 font-poppins">
+        <div className="w-full h-screen px-3  font-poppins">
           <div className="w-full p-5">
             <Button
               className="bg-blue-gray-900 float-right"
@@ -93,8 +95,8 @@ function Categories() {
             </Button>
           </div>
           <Toaster position="top-center" reverseOrder={false}></Toaster>
-          <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-            <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
+          <div className=" rounded-lg border border-gray-200 shadow-md m-5">
+            <table className="w-full  border-collapse bg-white text-left text-sm text-gray-500">
               <thead className="bg-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-4 font-large text-gray-900">
@@ -134,7 +136,7 @@ function Categories() {
                           Edit
                         </Button>
                         <Button
-                          onClick={() => deleteCategory(category)}
+                          onClick={() => deleteCategory(category.id)}
                           variant="gradient"
                          
                         >

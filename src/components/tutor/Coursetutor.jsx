@@ -121,6 +121,7 @@ function Coursetutor() {
 
 
   const deleteCourse = async (id) => {
+    console.log(id);
     try {
       const response = await axios.delete(
         `${BASE_URL}courses/delete-course/${id}`
@@ -355,7 +356,7 @@ function Coursetutor() {
                 placeholder="Enter price"
                 className="mt-1"
               />
-              <label className="text-gray-600">user</label>
+              {/* <label className="text-gray-600">user</label>
 
               <select
                 value={editedCourse.user}
@@ -365,7 +366,7 @@ function Coursetutor() {
                 {student.map((user) => (
                   <option value={user.first_name}>{user.first_name}</option>
                 ))}
-              </select>
+              </select> */}
             </div>
           ) : (
             "Are you sure you want to delete this course?"

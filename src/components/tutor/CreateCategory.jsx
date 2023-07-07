@@ -11,33 +11,39 @@ function AddCourseForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const form = new FormData();
-    form.append("name", category);
-    form.append("description", description);
-    form.append("image", image);
+console.log(image);
+    const formData = new FormData();
+    formData.append("name", category);
+    formData.append("description", description);
+    if (image) {
+      formData.append("image", image);
+    }
 
     try {
-      console.log("Form Data:", Object.fromEntries(form)); // Debug statement
-      const res = await instance.post("/courses/createcategory/", form);
-      console.log("Response:", res); // Debug statement
+      const res = await instance.post("courses/createcategory/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(res);
 
       if (res.status === 201) {
+        
         toast.success("Category created");
         navigate("/categorytutor");
       } else {
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.error("Error:", error); // Debug statement
+      console.error("Error:", error);
       toast.error("An error occurred. Please try again.");
     }
   };
 
   return (
     <div className="bg-gradient-to-br h-screen w-screen flex items-center justify-center">
-      <Toaster position="top-center" reverseOrder={false} />
-
+          <Toaster position="top-center" reverseOrder={false} />
+      
       <form
         className="w-full mx-auto flex flex-col justify-center items-center"
         onSubmit={handleSubmit}
@@ -48,7 +54,7 @@ function AddCourseForm() {
         <input
           className="bg-white h-14 w-5/12 border-2 mt-5 placeholder-black outline-none text-black px-6 block"
           type="text"
-          name="course"
+          name="category"
           placeholder="Category Name"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -65,14 +71,15 @@ function AddCourseForm() {
           required
         />
 
-        <input
-          className="bg-white h-14 w-5/12 border-2 mt-5 placeholder-black outline-none text-black px-6 block"
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])}
-          required
-        />
+<input
+  className="bg-white h-14 w-5/12 border-2 mt-5 placeholder-black outline-none text-black px-6 block"
+  type="file"
+  name="image"
+  accept="image/*"
+  onChange={(e) => setImage(e.target.files[0])}
+  required
+/>
+
 
         <input
           className="bg-custom-red mt-6 h-7 w-5/12 text-white"
@@ -80,6 +87,8 @@ function AddCourseForm() {
           value="Create"
         />
       </form>
+  
+
     </div>
   );
 }

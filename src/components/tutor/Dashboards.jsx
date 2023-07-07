@@ -33,7 +33,7 @@ export default function Dashboards() {
 
 
   async function getTutor() {
-    const response = await instance.get('tutor/tutors/')
+    const response = await instance.get('api-tutor/tutor/')
     setTutor(response.data)
 }
 
@@ -46,7 +46,7 @@ export default function Dashboards() {
 
 
   return (
-    <div className='flex bg-acontent'>
+    <div className='flex overflow-y-hidden '>
         <Sidebar/>
         <div className='px-5 w-full h-full min-h-screen mx-5 mt-2  py-5 font-poppins flex flex-col place-content-start place-items-center bg-white shadow-xl rounded-xl'>
           <div className=" h-20 w-full flex place-content-start place-items-center px-5">

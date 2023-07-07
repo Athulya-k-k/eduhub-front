@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import instance from "../../utils/axios";
 
 function AddCourseForm() {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [course, setCourse] = useState("");
   const [category, setCategory] = useState(null);
   const [title, setTitle] = useState("");
@@ -22,43 +22,40 @@ function AddCourseForm() {
 
   useEffect(() => {
     async function categories() {
-      const response = await instance.get(`courses/category/`);
+      const response = await instance.get('courses/category/');
       setCategorylist(response.data);
     }
     categories();
-    const user = getLocal();
-    const data = jwtDecode(user);
-    setUser(data.user_id);
-    console.log(user);
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const form = new FormData();
-    form.append("user", user);
+    // form.append("user", user);
     form.append("course", course);
     form.append("category", category);
     form.append("title", title);
     form.append("subtitle", subtitle);
     form.append("description", description);
     form.append("price", price);
-    form.append("image", image); // Append the image file directly
-    form.append("video", video); // Append the video file directly
+    form.append("image", image); 
+    form.append("video", video); 
 
     console.log(image);
     const res = await instance({
       method: "post",
-      url: `courses/createcourse/`,
+      url: 'courses/createcourse/',
       data: form,
       headers: {
-        "Content-Type": "multipart/form-data", // Set the correct content type header
+        "Content-Type": "multipart/form-data",
       },
     });
     console.log(res);
     if (res.status === 201) {
       toast.success("course added");
       navigate("/coursetutor");
+    
     } else {
       toast.error(res.statusText);
     }

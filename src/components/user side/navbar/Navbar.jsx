@@ -58,14 +58,16 @@ function NavBar() {
             <Link to="/"><li className='px-1 list-none text-black'>Home</li></Link>
             <Link to="/course"><li className='px-1 list-none text-black'>Courses</li></Link>
             <Link to="/user/cart"><BsCart3 className="cursor-pointer text-white"></BsCart3></Link>
+            {/* <Link to="/tutorsignup"><li className='px-1 list-none text-black'>Instructor</li></Link> */}
+            <Link to="/user/cart"><BsCart3 className="cursor-pointer text-white"></BsCart3></Link>
         </div> 
-        {user_auth ? (
+        {/* {user_auth ? (
           user_name.is_staff ? (
             <Link to="/courses"><li className='px-1 list-none text-black'>Instructor</li></Link>
           ) : (
             <Link to="/tutorregister"><li className='px-1 list-none text-black'>Become an Instructor</li></Link>
           )
-        ) : null}
+        ) : null} */}
 
 
 
@@ -79,7 +81,8 @@ function NavBar() {
         : 
         <div>
             <div className='flex gap-2'>
-            <Link to="/login"><li className='px-1 list-none'></li><button className='px-4 py-2 bg-green-400 mx-2 text-black shadow-xl rounded-xl' >Login</button></Link>
+            <Link to="/login"><li className='px-1 list-none'></li><button className='px-4 py-2 bg-green-400 mx-2 text-black shadow-xl rounded-xl' >user Login</button></Link>
+            <Link to="/tutorsignin"><li className='px-1 list-none'></li><button className='px-4 py-2 bg-green-400 mx-2 text-black shadow-xl rounded-xl' >tutor Login</button></Link>
             </div>   
         </div>
         }

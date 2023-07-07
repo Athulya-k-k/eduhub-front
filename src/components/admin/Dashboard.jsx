@@ -30,7 +30,7 @@ export default function Dashboard() {
 
 
   async function getTutor() {
-    const response = await instance.get('tutor/tutors/')
+    const response = await instance.get('api-tutor/tutor/')
     setTutor(response.data)
 }
 

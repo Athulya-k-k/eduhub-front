@@ -12,14 +12,16 @@ import profile from '../../images/avatar2.png'
 
 export default function Sidebar() {
     const history = useNavigate()
+    const navigate = useNavigate();
 
-    const adminLogout = () => {
-        localStorage.removeItem('authToken')
-        history('/')
-    }
+   
+    const handleLogout = () => {
+        localStorage.removeItem('teacherLoginStatus');
+        navigate('/');
+      };
 
   return (
-    <div className='bg-white z-50 absolute h-auto min-h-screen xl:relative left-0 w-2/4 md:w-2/6 lg:w-1/5 shadow-xl  font-poppins rounded-r-2xl '>
+    <div className='bg-white z-50 absolute h-auto min-h-screen xl:relative left-0 w-2/4 md:w-2/6 lg:w-1/5 shadow-xl  font-poppins rounded-r-2xl  '>
         <div className="flex py-3">
             <img src={profile} alt="admin_profile_image" className='rounded-xl w-14 h-30 ml-12 mt-6' />
             <div className="flex flex-col place-content-center place-items-start">
@@ -52,10 +54,14 @@ export default function Sidebar() {
   <h3 className='font-semibold'>Category</h3>
 </NavLink>
 
-            <div className="flex place-items-center h-10 my-2 cursor-pointer" onClick={()=>{adminLogout()}}>
-                <CiLogout size={50} className='px-3 text-primaryBlue'></CiLogout>
-                <h3 className='font-semibold text-primaryBlue'>Logout</h3>
-            </div>
+<NavLink
+      to="/"
+      className="bg-cards rounded-xl flex place-items-center text-black my-2"
+      onClick={()=>handleLogout()}
+    >
+      <CiLogout size={50} className="px-3 text-primaryBlue" />
+      <h3 className="font-semibold text-red-600">Logout</h3>
+    </NavLink>
 
         </div>
     </div>
