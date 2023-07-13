@@ -57,7 +57,7 @@ function Register() {
     }
   
     try {
-      const response = await instance.post('/api/register/', {
+      const response = await instance.post('api/register/', {
         first_name,
         last_name,
         email,

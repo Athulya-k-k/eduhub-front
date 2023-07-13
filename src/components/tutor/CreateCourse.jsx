@@ -6,17 +6,21 @@ import { useNavigate } from "react-router-dom";
 import instance from "../../utils/axios";
 
 function AddCourseForm() {
-  // const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [course, setCourse] = useState("");
   const [category, setCategory] = useState(null);
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(null);
+  const [tutor,setTutor]=useState(null)
+ 
 
   const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const [categoryList, setCategorylist] = useState([]);
+  const [tutorList,setTutorlist]=useState([])
+  const [userList,setUserlist]=useState([])
 
   const navigate = useNavigate();
 
@@ -28,11 +32,30 @@ function AddCourseForm() {
     categories();
   }, []);
 
+  useEffect(()=>{
+  async function getTutor() {
+    const response = await instance.get('api-tutor/tutor/')
+    setTutorlist(response.data)
+}
+
+  
+    getTutor();
+  }, [])
+
+  useEffect(()=>{
+  async function getUser() {
+    const response = await instance.get("api/users/");
+    setUserlist(response.data);
+  }
+  getUser();
+  }, [])
+
+console.log('getStudent');
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const form = new FormData();
-    // form.append("user", user);
+    form.append("user", user);
     form.append("course", course);
     form.append("category", category);
     form.append("title", title);
@@ -41,6 +64,7 @@ function AddCourseForm() {
     form.append("price", price);
     form.append("image", image); 
     form.append("video", video); 
+    form.append("tutor", tutor); 
 
     console.log(image);
     const res = await instance({
@@ -91,7 +115,7 @@ function AddCourseForm() {
             className=" bg-white  h-14 w-5/12 border-2 mt-5 placeholder-black outline-none text-black  px-6 block"
             type="text"
             name="title"
-            placeholder=" titlename"
+            placeholder=" subtitlename"
             onChange={(e) => setSubtitle(e.target.value)}
             required
           />
@@ -110,15 +134,33 @@ function AddCourseForm() {
             type="text"
             name="category"
             placeholder=" category"
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => setTutor(e.target.value)}
             required
           >
-            <option value="">Select category</option>
-            {categoryList.map((category) => (
-              <option value={category.id}>{category.name}</option>
+            <option value="">Select Tutor</option>
+            {tutorList.map((tutor) => (
+              <option value={tutor.id}>{tutor.full_name}</option>
               
             ))}
           </select>
+
+          <select
+            className=" bg-white  h-14 w-5/12 border-2 mt-5 placeholder-black  outline-none text-black  px-6 block"
+            type="text"
+            name="student"
+            placeholder=" userr"
+            onChange={(e) => setUser(e.target.value)}
+            required
+          >
+            <option value="">Select </option>
+            {userList.map((user) => (
+              <option value={user.id}>{user.username}</option>
+              
+            ))}
+          </select>
+
+
+
 
           <input
             className=" bg-white  h-14 w-5/12 border-2  mt-5 placeholder-black  outline-none text-black  px-6 block"
@@ -128,6 +170,7 @@ function AddCourseForm() {
             onChange={(e) => setPrice(e.target.value)}
             required
           />
+         
 
           <input
             className=" bg-white  h-14 w-5/12 border-2  mt-5 placeholder-black  outline-none text-black  px-6 block"
@@ -147,6 +190,23 @@ function AddCourseForm() {
             onChange={(e) => setVideo(e.target.files[0])}
             required
           />
+
+
+<select
+            className=" bg-white  h-14 w-5/12 border-2 mt-5 placeholder-black  outline-none text-black  px-6 block"
+            type="text"
+            name="tutor"
+            placeholder=" category"
+            onChange={(e) => setCategory(e.target.value)}
+            required
+          >
+            <option value="">Select category</option>
+            {categoryList.map((category) => (
+              <option value={category.id}>{category.name}</option>
+              
+            ))}
+          </select>
+
 
           <input
             className="bg-custom-red mt-6 h-7 w-5/12  text-white"

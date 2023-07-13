@@ -56,18 +56,20 @@ function NavBar() {
         <div className='flex gap-3 place-items-center'>
         
             <Link to="/"><li className='px-1 list-none text-black'>Home</li></Link>
+            {user_auth ? (
+              <>
+              <Link to="/mylearning"><li className='px-1 list-none text-black'>My Learning</li></Link>
+              <Link to="/profile"><li className='px-1 list-none'></li>Edit profile</Link>
+              </>  )
+            
+            :
+              null
+            }
             <Link to="/course"><li className='px-1 list-none text-black'>Courses</li></Link>
-            <Link to="/user/cart"><BsCart3 className="cursor-pointer text-white"></BsCart3></Link>
-            {/* <Link to="/tutorsignup"><li className='px-1 list-none text-black'>Instructor</li></Link> */}
-            <Link to="/user/cart"><BsCart3 className="cursor-pointer text-white"></BsCart3></Link>
+            <Link to="/cart"><BsCart3 className="cursor-pointer text-black"></BsCart3></Link>
+
         </div> 
-        {/* {user_auth ? (
-          user_name.is_staff ? (
-            <Link to="/courses"><li className='px-1 list-none text-black'>Instructor</li></Link>
-          ) : (
-            <Link to="/tutorregister"><li className='px-1 list-none text-black'>Become an Instructor</li></Link>
-          )
-        ) : null} */}
+       
 
 
 
@@ -75,14 +77,15 @@ function NavBar() {
         <div>
             <div className='flex gap-2'>
             <Link to="/login"><li className='px-1 list-none'></li><button className='px-4 py-2 bg-green-400 mx-2 text-black shadow-xl rounded-xl' onClick={logout} >Logout</button></Link>
+          
 
             </div>   
         </div> 
         : 
         <div>
             <div className='flex gap-2'>
-            <Link to="/login"><li className='px-1 list-none'></li><button className='px-4 py-2 bg-green-400 mx-2 text-black shadow-xl rounded-xl' >user Login</button></Link>
-            <Link to="/tutorsignin"><li className='px-1 list-none'></li><button className='px-4 py-2 bg-green-400 mx-2 text-black shadow-xl rounded-xl' >tutor Login</button></Link>
+            <Link to="/login"><li className='px-1 list-none'></li><button className='px-3 py-1 bg-customColorB  text-white shadow-xl rounded-xl' >User Login</button></Link>
+            <Link to="/tutorsignin"><li className='px-1 list-none'></li><button className='px-3 py-1 bg-customColorB text-white shadow-xl rounded-xl' >Tutor Login</button></Link>
             </div>   
         </div>
         }

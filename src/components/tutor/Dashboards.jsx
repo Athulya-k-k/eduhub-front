@@ -10,6 +10,7 @@ import { useEffect } from "react";
 export default function Dashboards() {
   const[courses,setCourses]=useState([]);
   const[tutor,setTutor]=useState([]);
+  const[student,setStudent]=useState([]);
  
 
   async function getCourses(){
@@ -42,6 +43,16 @@ export default function Dashboards() {
   }, [])
 
 
+  async function getStudent() {
+    const response = await instance.get("api/users/");
+    setStudent(response.data);
+  }
+
+  useEffect(() => {
+    getStudent();
+  }, [])
+
+
 
 
 
@@ -59,6 +70,12 @@ export default function Dashboards() {
                  <div className="w-full h-full flex flex-col place-items-center gap-3 place-content-center">
                   <h3 className='text-black font-semibold text-center text-xl'>Total Courses</h3>
                   <h4 className='font-semibold text-black text-2xl text-center'>{courses.length}</h4>
+                 </div>
+              </div>
+              <div className="bg-cards w-3/6 h-35 shadow-xl p-5 m-3 rounded-xl flex flex-col">
+                 <div className="w-full h-full flex flex-col place-items-center gap-3 place-content-center">
+                  <h3 className='text-black font-semibold text-center text-xl'>Total Students</h3>
+                  <h4 className='font-semibold text-black text-2xl text-center'>{student.length}</h4>
                  </div>
               </div>
               <div className="bg-cards w-3/6 h-35 shadow-xl rounded-xl p-5">

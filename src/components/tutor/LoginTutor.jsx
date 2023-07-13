@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import Loginimage from "../../images/tutor.jpg";
+import Loginimage from "../../images/login.png";
 import { toast, Toaster } from "react-hot-toast";
 
 const baseUrl = 'http://127.0.0.1:8000/api-tutor';
@@ -33,7 +33,7 @@ function TutorLogin() {
             localStorage.setItem('tutor_id', res.data.tutor_id);
             window.location.href = '/dashboards';
           } else {
-            toast.error(res.data.msg);
+            toast.error('something went wrong');
           }
         });
     } catch (error) {
@@ -58,7 +58,7 @@ function TutorLogin() {
   
 
   return (
-    <div className="bg-gradient-to-br from-f6c2f9 to-819ff9 h-screen w-screen flex items-center justify-center">
+    <div className="bg-gradient h-screen w-screen flex items-center justify-center">
       <Toaster position="top-center" reverseOrder={false}/>
       {/* <div className=" h-5/6 w-10/12 flex flex-row bg-gradient-to-r from-yellow-50 to-pink-200 rounded-3xl"> */}
       <div className=" h-5/6 w-10/12 flex flex-row bg-gradient-to-r from-white  to-gray-300 rounded-3xl">
@@ -68,7 +68,7 @@ function TutorLogin() {
         <div className=" h-full w-3/6 flex items-center justify-center  ">
           <div className="bg-white h-5/6  w-4/6 rounded-3xl ">
             <h1 className="font-serif text-3xl text-custom-red mt-24 px-24 font-bold">
-              Tutor LOGIN
+              TUTOR LOGIN
             </h1>
             <form onSubmit={submitForm}>
               <input
@@ -88,7 +88,7 @@ function TutorLogin() {
                 onChange={handleChange}
               />
               <input
-                className="bg-red-300 mt-7 h-11 w-5/12 rounded-full text-black"
+                className="bg-custom-red mt-7 h-11 w-5/12 rounded-full text-white"
                 type="submit"
                 value="LOGIN"
               />

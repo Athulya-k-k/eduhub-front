@@ -282,13 +282,7 @@ function Coursetutor() {
             </table>
           </div>
         </div>
-        <Pagination
-            totalPosts={courses.length}
-            postsPerPage={postsPerPage}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-          />
-      </div>
+        
       
       <Dialog open={open} onClose={handleClose}>
         <DialogHeader>{editMode ? "Edit Course" : "Confirmation"}</DialogHeader>
@@ -356,17 +350,7 @@ function Coursetutor() {
                 placeholder="Enter price"
                 className="mt-1"
               />
-              {/* <label className="text-gray-600">user</label>
-
-              <select
-                value={editedCourse.user}
-                onChange={handleInputChange}
-                name="user"
-              >
-                {student.map((user) => (
-                  <option value={user.first_name}>{user.first_name}</option>
-                ))}
-              </select> */}
+             
             </div>
           ) : (
             "Are you sure you want to delete this course?"
@@ -398,6 +382,13 @@ function Coursetutor() {
         </DialogFooter>
       </Dialog>
       <ToastContainer position="top-center" />
+      <Pagination
+            totalPosts={courses.length}
+            postsPerPage={postsPerPage}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+          />
+      </div>
      
     </div>
   );

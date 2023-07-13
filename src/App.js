@@ -22,6 +22,18 @@ import CategoryTutor from './components/tutor/CategoryTutor'
 import CreateCategory from './components/tutor/CreateCategory'
 import Tutorregister from './components/tutor/Tutorregister'
 import LoginTutor from './components/tutor/LoginTutor'
+import Payment from './components/user side/course/Payment'
+import Students from './components/tutor/Students'
+import Chat from './components/tutor/Chat'
+import Mylearnings from "./components/user side/course/Mylearnings";
+import Profile from "./components/accounts/Profile";
+import ProfileSide from './components/accounts/ProfileSide'
+import ChangePassword from './components/accounts/ChangePassword'
+import Courseattend from "./components/user side/course/Courseattend";
+import Rating from "./components/user side/course/Rating";
+import Cart from "./components/user side/course/Cart";
+
+
 
 
 function App() {
@@ -49,6 +61,18 @@ function App() {
           <Route path='/createcategory' Component={CreateCategory}/>
           <Route path='/tutorsignup' Component={Tutorregister}/>
           <Route path='/tutorsignin' Component={LoginTutor}/>
+          <Route path='/payment' Component={Payment}/>
+          <Route path='/students' Component={Students}/>
+          <Route path='/Chat' Component={Chat}/>
+          <Route path='/mylearning' Component={Mylearnings}/>
+          <Route path='/profile' Component={Profile}/>
+          <Route path='/profileside' Component={ProfileSide}/>
+          <Route path='/passwordchange' Component={ChangePassword}/>
+          <Route path='/courseattend' Component={Courseattend}/>
+          <Route path='/rating' Component={Rating}/>
+          <Route path='/cart' Component={Cart}/>
+        
+         
           
         
         </Routes>

@@ -38,16 +38,21 @@ export default function Sidebar() {
             <BsBook size={50} className='px-3'></BsBook>
                 <h3 className='font-semibold'>Courses</h3>
             </NavLink>
+
+            <NavLink to="/students" className={({isActive})=>(isActive ? 'bg-cards rounded-xl flex place-items-center text-black my-2' : 'flex place-items-center bg-white-10 my-2')}>
+            <BsBook size={50} className='px-3'></BsBook>
+                <h3 className='font-semibold'>students</h3>
+            </NavLink>
           
-            <NavLink to="/*" className={({isActive})=>(isActive ? 'bg-cards rounded-xl flex place-items-center text-black my-2' : 'flex place-items-center bg-white-10 my-2')}>
+            {/* <NavLink to="/*" className={({isActive})=>(isActive ? 'bg-cards rounded-xl flex place-items-center text-black my-2' : 'flex place-items-center bg-white-10 my-2')}>
                 <SlGraduation size={50} className='px-3'></SlGraduation>
-                <h3 className='font-semibold'>Announcements</h3>
+                <h3 className='font-semibold'>Session</h3>
             </NavLink>
            
             <NavLink to="/*" className={({isActive})=>(isActive ? 'bg-cards rounded-xl flex place-items-center text-black my-2' : 'flex place-items-center bg-white-10 my-2')}>
                 <BiCategoryAlt size={50} className='px-3'></BiCategoryAlt>
                 <h3 className='font-semibold'>Reviews</h3>
-            </NavLink>
+            </NavLink> */}
           
             <NavLink to="/categorytutor" className={({isActive})=>(isActive ? 'bg-cards rounded-xl flex place-items-center text-black my-2' : 'flex place-items-center bg-white-10 my-2')}>
   <HiOutlineDocumentText size={50} className='px-3'></HiOutlineDocumentText>
