@@ -17,6 +17,7 @@ export default function Checkout() {
   const [address2, setAddress2] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [orderId, setOrderId] = useState('');
 
   const userAuth = getLocal('authToken');
   let user_name;
@@ -59,62 +60,159 @@ export default function Checkout() {
 
       console.log('Everything is OK!');
       console.log(res.data.order_id);
-      navigate(`/invoice/${res.data.order_id}`);
+      navigate('/');
     } catch (error) {
       console.error(error);
     }
   };
 
-  const showRazorpay = async () => {
-    if (!fname || !lname || !address1 || !address2 || !email || !phone) {
-      toast.error('Please fill in all data');
-    } else {
-      const options = {
-        key_id: 'rzp_test_Lny9ufvQpupgij', // Replace with your Razorpay key
-        amount: subtotal * 100, // Multiply subtotal by 100 as Razorpay expects amount in paisa
-        currency: 'INR',
-        name: 'Eduhub',
-        description: 'Test transaction',
-        image: '', // Add image URL
-        order_id: ' data.data.payment.id', // Set dynamically based on response from backend
-        handler: function (response) {
-          handlePaymentSuccess(response);
-        },
-        prefill: {
-          name: 'User name',
-          email: 'User email',
-          contact: 'User phone',
-        },
-        notes: {
-          address: 'Razorpay Corporate Office',
-        },
-        theme: {
-          color: '#3399cc',
-        },
-      };
 
-      const res = await axios.post(`${BASE_URL}payment/pay/`, {
-        amount: subtotal,
-        user: user_name.user_id,
-        fname,
-        lname,
-        address1,
-        address2,
-        email,
-        phone,
-      });
-
-      if (!res.data.success) {
-        console.error('Failed to generate Razorpay order ID');
-        return;
-      }
-
-      options.order_id = res.data.orderId;
-
-      const rzp1 = new window.Razorpay(options);
-      rzp1.open();
-    }
+  const loadScript = () => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    document.body.appendChild(script);
   };
+
+  const showRazorpay = async () => {
+    if (!fname || !lname || !address1 || !address2 || !email || !phone)
+    {
+      toast.error("pls fill all data")
+    }
+    else{
+
+
+    const res = await loadScript();
+
+    let bodyData = new FormData();
+
+    // we will pass the amount and product name to the backend using form data
+
+    bodyData.append("amount", subtotal);
+    bodyData.append("user", user_name.user_id);
+    bodyData.append("fname",fname)
+    bodyData.append("lname",lname)
+    bodyData.append("address1",address1)
+    bodyData.append("address2",address2)
+    bodyData.append("email",email)
+    bodyData.append("phone",phone)
+
+    const data = await axios({
+      url: `${BASE_URL}payment/pay/`,
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      data: bodyData,
+    }).then((res) => {
+      return res;
+    });
+
+    // in data we will receive an object from the backend with the information about the payment
+    //that has been made by the user
+
+    const REACT_APP_PUBLIC_KEY = 'rzp_test_Lny9ufvQpupgij'
+    const REACT_APP_SECRET_KEY = 'Ypbtz8V120wVBYxTaf5d3M6j'
+    
+    var options = {
+      key_id: REACT_APP_PUBLIC_KEY, // in react your environment variable must start with REACT_APP_
+      key_secret: REACT_APP_SECRET_KEY,
+      amount: data.data.payment.amount,
+      currency: "INR",
+      name: "EduHub",
+      description: "Test teansaction",
+      image: "", // add image url
+      order_id: data.data.payment.id,
+      
+      handler: function (response) {
+        // we will handle success by calling handlePaymentSuccess method and
+        // will pass the response that we've got from razorpay
+        handlePaymentSuccess(response);
+      },
+      prefill: {
+        name: "User's name",
+        email: "User's email",
+        contact: "User's phone",
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    var rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  }
+  };
+
+
+
+
+
+
+//   const showRazorpay = async () => {
+//     if (!fname || !lname || !address1 || !address2 || !email || !phone) {
+//       toast.error('Please fill in all data');
+//     } else {
+//       const options = {
+   
+
+//         key: `rzp_test_Lny9ufvQpupgij`, // Replace with your Razorpay key
+//         amount: subtotal * 100, // Multiply subtotal by 100 as Razorpay expects amount in paisa
+//         currency: 'INR',
+//         name: 'Eduhub',
+//         description: 'Test transaction',
+//         image: '', // Add image URL
+//         order_id: ' data.data.payment.id', // Set dynamically based on response from backend
+//         handler: function (response) {
+//           handlePaymentSuccess(response);
+//         },
+//         prefill: {
+//           name: 'User name',
+//           email: 'User email',
+//           contact: 'User phone',
+//         },
+//         notes: {
+//           address: 'Razorpay Corporate Office',
+//         },
+//         theme: {
+//           color: '#3399cc',
+//         },
+//       };
+
+//       const res = await axios.post(`${BASE_URL}payment/pay/`, {
+//         amount: subtotal,
+//         user: user_name.user_id,
+//         fname,
+//         lname,
+//         address1,
+//         address2,
+//         email,
+//         phone,
+//       }).then((res) => {
+//         return res;
+//       });
+// // console.log(res);
+//       // if (!res.data.success) {
+//       //   console.error('Failed to generate Razorpay order ID');
+//       //   return;
+//       // }
+//       if (res.data.success) {
+//         setOrderId(res.data.orderId); 
+//         options.order_id = res.data.orderId;
+      
+
+
+ 
+//       const rzp1 = new window.Razorpay(options);
+//       rzp1.open();
+//       }else {
+//         console.error('Failed to generate Razorpay order ID');
+
+//       }}
+//   };
 
   return (
     <div className="w-full h-full font-poppins relative">
@@ -179,7 +277,7 @@ export default function Checkout() {
             <p className='font-semibold'>₹ {subtotal}</p>
           </div>
           <Link className='h-11 rounded-xl place-items-center bg-cards text-center text-black font-semibold'>
-            <button onClick={showRazorpay} className='bg-darkPink px-3 py-2 text-black font-semibold'>Pay Now</button>
+            <button onClick={showRazorpay} className='bg-teal-700 px-3 py-2 rounded-lg text-black font-semibold'>Pay Now</button>
           </Link>
         </div>
       </div>

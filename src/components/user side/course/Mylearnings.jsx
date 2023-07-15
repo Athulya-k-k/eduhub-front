@@ -24,10 +24,11 @@ export default function Mylearnings() {
     getmycourses()
   }, [])
 
-  async function getmycourses(){
-    const response = await instance.get(`courses/mycourse/${user_name.user_id}`)
-    setMycourses(response.data)
-  }
+ async function getmycourses() {
+  const response = await instance.get(`courses/mycourse/${user_name.user_id}`);
+  console.log(response.data); // Check the response data in the console
+  setMycourses(response.data);
+}
 
 
 
@@ -40,7 +41,7 @@ export default function Mylearnings() {
             <NavBar/>
             <div className="w-full py-10  flex flex-col place-content-center place-items-center">
                 <div className="w-4/5">
-                    <h2 className='text-3xl font-semibold text-white '>My Learnings</h2>
+                    <h2 className='text-3xl font-semibold text-black '>My Learnings</h2>
                 </div>
             </div>
         </div>
@@ -53,14 +54,17 @@ export default function Mylearnings() {
             myCoures?.map((item)=>(
             <div className="shadow-xl bg-white rounded-xl place-content-between h-120 px-1 mr-8 py-8 w-72 flex-col flex gap-8">
                 <div className='p-3 rounded-md w-full h-56'>
-                  <img className='w-full h-5/6 rounded-md' src={details+item?.course.image} alt="course_image" />
+                <div className="p-3 rounded-md w-full h-56">
+  <img className="w-full h-full rounded-md" src={item?.course?.image} alt="course_image" />
+</div>
+
                 </div>
                 <div className="flex flex-col pl-2">
                     <p className='text-md font-bold  text-black'>{item?.course?.title}</p>
                 </div>
                 <Link to={`/attendcourse/${item?.course?.id}`}>
                 <div className="w-full px-3 flex place-content-center">
-                    <button className=' text-white px-5 py-3 w-full rounded-lg bg-bgcart' >Start Course</button>
+                    <button className=' text-black px-5 py-3 w-full rounded-lg bg-bgcart' >Start Course</button>
                 </div>
                 </Link>
 
