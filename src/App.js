@@ -36,6 +36,7 @@ import Cart from "./components/user side/course/Cart";
 
 
 
+
 function App() {
   return (
     <div className="App">
@@ -68,9 +69,10 @@ function App() {
           <Route path='/profile' Component={Profile}/>
           <Route path='/profileside' Component={ProfileSide}/>
           <Route path='/passwordchange' Component={ChangePassword}/>
-          <Route path='/courseattend' Component={Courseattend}/>
+        
           <Route path='/rating' Component={Rating}/>
           <Route path='/cart' Component={Cart}/>
+          <Route path='/attendcourse/:id' element={<Courseattend/>}/>
         
          
           

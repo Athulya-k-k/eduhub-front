@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from '../navbar/Navbar';
 import { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { AiOutlineCloseSquare } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../../utils/axios';
 import jwtDecode from 'jwt-decode';
@@ -11,10 +10,11 @@ import { getLocal } from '../../../helpers/auth';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { details } from '../../../utils/axios';
+import profile from '../../../images/avatar.jpg';
 
 export default function Cart() {
   const [Cart, setCart] = useState([]);
-  const [total, setTotal] = useState('');
+  const [total, setTotal] = useState(0); // Updated to initialize total as 0
 
   const user_auth = getLocal('authToken');
   let user_name;
@@ -24,16 +24,16 @@ export default function Cart() {
 
   useEffect(() => {
     getCart();
-  }, []);
+  }, [toast]);
 
   async function getCart() {
     if (user_name) {
       const cart_response = await axios.get(`${BASE_URL}cart/getcarts/${user_name.user_id}`);
       setCart(cart_response.data.data);
-      setTotal(cart_response.data.total);
+      calculateTotal(cart_response.data.data); // Calculate total when cart data is fetched
     } else {
       setCart([]);
-      setTotal('');
+      setTotal(0); // Reset total to 0 when there is no user authenticated
     }
   }
 
@@ -64,9 +64,15 @@ export default function Cart() {
     }
   };
 
+  // Function to calculate the subtotal
+  const calculateTotal = (cartItems) => {
+    const subtotal = cartItems.reduce((acc, item) => acc + item.course.price, 0);
+    setTotal(subtotal);
+  };
+
   return (
     <div className="w-full h-full font-poppins relative">
-      <Toaster position="top-center" reverseOrder="false"></Toaster>
+       <Toaster position="top-center" reverseOrder="false"></Toaster>
       <div className="w-full h-80 bg-cover bg-white">
         <NavBar />
         <div className="w-full py-10  flex flex-col place-content-center place-items-center">
@@ -84,17 +90,16 @@ export default function Cart() {
                 key={item.id}
               >
                 <div className="w-40">
-                  <img className="rounded-md" src={item.course.image} alt="product_image" />
+                  <img className="rounded-md"   src={details.base_url+item.course.image} alt="product_image" />
                 </div>
                 <div className="flex flex-2 flex-col place-content-start gap-5">
                   <h2 className="text-2xl font-semibold font-poppins">{item.course.title}</h2>
                   <div className="w-full flex gap-5 place-items-center">
-                    <img className="w-10 h-10 rounded-xl" src="/avatar1.avif" alt="tutor_profile" />
+                  <img className="w-10 h-10 rounded-xl" src={profile} alt="tutorprofile" />
+
                     <p>Athulya</p>
                   </div>
-                  <div>
-                    <p className="text-md text-gray-600 font-poppins"> Lectures</p>
-                  </div>
+                 
                 </div>
                 <div className="flex flex-1 gap-3 place-content-center place-items-center">
                   <div className="w-full flex flex-col gap-1">
@@ -119,11 +124,11 @@ export default function Cart() {
                 <p>₹ {item.course.price}</p>
               </div>
             ))}
-            <div className="w-full flex gap-2 place-content-between">
-              <p className="text-xl font-semibold ">Sub Total : </p>
-              <p className="font-semibold">₹ {total}</p>
-            </div>
-            <button className="h-11 rounded-xl place-items-center bg-cards text-center text-black font-semibold" onClick={handleCheckout}>
+      <div className="w-full flex gap-2 place-content-between">
+        <p className="text-xl font-semibold">Sub Total:</p>
+        <p className="font-semibold">₹ {total}</p>
+      </div>
+      <button className="h-11 rounded-xl place-items-center bg-cards text-center text-black font-semibold" onClick={handleCheckout}>
               Checkout
             </button>
           </div>

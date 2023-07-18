@@ -24,11 +24,10 @@ export default function Mylearnings() {
     getmycourses()
   }, [])
 
- async function getmycourses() {
-  const response = await instance.get(`courses/mycourse/${user_name.user_id}`);
-  console.log(response.data); // Check the response data in the console
-  setMycourses(response.data);
-}
+  async function getmycourses(){
+    const response = await instance.get(`courses/mycourse/${user_name.user_id}`)
+    setMycourses(response.data)
+  }
 
 
 
@@ -54,10 +53,7 @@ export default function Mylearnings() {
             myCoures?.map((item)=>(
             <div className="shadow-xl bg-white rounded-xl place-content-between h-120 px-1 mr-8 py-8 w-72 flex-col flex gap-8">
                 <div className='p-3 rounded-md w-full h-56'>
-                <div className="p-3 rounded-md w-full h-56">
-  <img className="w-full h-full rounded-md" src={item?.course?.image} alt="course_image" />
-</div>
-
+                  <img className='w-full h-5/6 rounded-md' src={details.base_url+item?.course.image} alt="course_image" />
                 </div>
                 <div className="flex flex-col pl-2">
                     <p className='text-md font-bold  text-black'>{item?.course?.title}</p>
