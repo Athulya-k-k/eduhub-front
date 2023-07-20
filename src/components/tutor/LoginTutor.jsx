@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Loginimage from "../../images/login.png";
 import { toast, Toaster } from "react-hot-toast";
 
-const baseUrl = 'http://127.0.0.1:8000/api-tutor';
+const baseUrl = 'https://eduhub-kof9.onrender.com/api-tutor';
 
 function TutorLogin() {
   const [teacherLoginData, setteacherLoginData] = useState({

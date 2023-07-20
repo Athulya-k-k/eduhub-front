@@ -2,7 +2,7 @@ import { toast } from "react-hot-toast";
 
 export default async function login(email, password) {
   try {
-    const response = await fetch("http://localhost:8000/api/token/", {
+    const response = await fetch("https://eduhub-kof9.onrender.com/api/token/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

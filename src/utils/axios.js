@@ -15,4 +15,3 @@ export const BASE_URL = ' https://eduhub-kof9.onrender.com/'
   });
 export default instance
 
-// http://localhost:8000/
