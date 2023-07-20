@@ -95,8 +95,8 @@ export default function Checkout() {
     // in data we will receive an object from the backend with the information about the payment
     //that has been made by the user
 
-    const REACT_APP_PUBLIC_KEY = 'rzp_test_Lny9ufvQpupgij'
-    const REACT_APP_SECRET_KEY = 'Ypbtz8V120wVBYxTaf5d3M6j'
+    const REACT_APP_PUBLIC_KEY = process.env.REACT_APP_PUBLIC_KEY
+    const REACT_APP_SECRET_KEY = process.env.REACT_APP_SECRET_KEY
     
     var options = {
       key_id: REACT_APP_PUBLIC_KEY, // in react your environment variable must start with REACT_APP_
