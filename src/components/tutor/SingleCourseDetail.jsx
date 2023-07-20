@@ -1,18 +1,21 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Toaster, toast } from 'react-hot-toast'
+import Sidebar from './Sidebar'
+import { Toaster } from 'react-hot-toast'
 import { useState,useEffect } from 'react'
 import axios from 'axios'
-import { BASE_URL } from '../../../utils/axios'
-import { details } from '../../../utils/axios'
+import { BASE_URL } from '../../utils/axios'
+import { details } from '../../utils/axios'
 import { useNavigate } from 'react-router-dom'
+import AddSession from './AddSession'
+import AddMaterial from './AddMaterial'
 import { MdOndemandVideo } from 'react-icons/md'
 import { AiOutlineBulb } from 'react-icons/ai'
 import { HiDocumentDuplicate } from 'react-icons/hi'
-
 import {RiVideoFill} from 'react-icons/ri'
+import {CiEdit} from 'react-icons/ci'
+import { toast } from 'react-hot-toast'
 import Swal from 'sweetalert2'
-
 
 import {
     Tabs,
@@ -27,60 +30,13 @@ import {
 
 
 
-export default function AsingleCourse() {
+export default function InstructorSingleCourse() {
+    const [toggle,setToggle] = useState({add:false,addmaterial:false});
     const course_id = useParams()
-    
     const [SingleCourse, setSingleCourse] = useState({})
     const [Sessions, setSessions] = useState([])
+    const navigate = useNavigate()
     const [Lecture, setLecture] = useState([])
-
-    const CourseApprove = (id) => {
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Change Status....!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-                axios.get(`${BASE_URL}courses/blockcourse/${id}`).then(
-                    getCourse()
-                )
-                getCourse()
-                toast.success("Success")
-            }
-        })
-    }
-
-
-
-    const CourseReject = (id) => {
-
-        Swal.fire({
-            title: 'Are you sure?',
-            input: 'text',
-            text: "Pls Enter the Message",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!',
-
-            preConfirm:(message) =>{
-                console.log(`message: ${message}`);
-                axios.get(`${BASE_URL}courses/rejectcourse/${message}/${id}`).then(
-                    getCourse()
-                )
-                getCourse()
-                toast.success("Success")
-            },
-
-        });
-
-    }
 
 
     useEffect(() => {
@@ -127,21 +83,60 @@ export default function AsingleCourse() {
         );
     }
 
+    function goTocreate() {
+        navigate('/createcourse')    
+    }
+
+    const Resubmit = (id) => {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Request for Approval...",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.get(`${BASE_URL}courses/resubmit/${id}`).then(
+                    getCourse()
+                )
+                getCourse()
+                toast.success("Requested")
+            }
+        })
+    }
+    
+    
+
 
   return (
-<div className='flex h-full bg-acontent'>
+    <div className='flex h-full bg-acontent'>
         <Toaster position='top-center' reverseOrder='false' ></Toaster>
-      
+        <Sidebar/>
         <div className='px-5 w-full h-auto min-h-screen mx-5 mt-2  py-8 font-poppins flex flex-col         place-content-start place-items-center bg-white shadow-xl rounded-xl'>
             <div className='flex place-content-between place-items-center w-full h-14'>
-                <div>
-                    <h2 className='font-semibold font-poppins text-primaryBlue text-xl'>Course Details</h2>
+                <h2 className='font-semibold font-poppins text-primaryBlue text-xl'>Course Management</h2>
+                <div className=''>
+                    {
+                    SingleCourse.is_rejected ?
+                    <button onClick={() => Resubmit(SingleCourse.id)} className='bg-cards rounded-lg text-center px-5 py-2 text-black text-light'>Re Submit</button>
+                    :
+                    null
+                    }
+                    <button onClick={()=>goTocreate()} className='bg-cards rounded-lg text-center ml-5 px-5 py-2 text-black text-light'>Create Course</button>
                 </div>
-              
-                
                 
             </div>
-           
+            {
+                SingleCourse.is_rejected ?
+                <div className='w-5/6 bg-red-300 py-2 mt-2 rounded-xl flex place-content-center place-items-center'>
+                <h2 className='font-poppins text-white text-primaryBlue text-md'>This Course Has been rejected due to : "{SingleCourse.reason}"</h2>
+                </div>
+                :
+                null
+            }
         
 
             <div class="flex flex-col rounded-lg border border-gray-200 shadow-md m-5 w-full">
@@ -173,6 +168,9 @@ export default function AsingleCourse() {
                             <Tab key="curriculum" value="curriculum" className=' font-semibold py-3'>
                                 Sessions
                             </Tab>
+                            <Tab key="materials" value="materials" className=' font-semibold py-3'>
+                                Materials
+                            </Tab>
                         
                         </TabsHeader>
                         <TabsBody>
@@ -203,7 +201,12 @@ export default function AsingleCourse() {
                                                         Lecture?.session===Session?.id &&
                                                         <Accordion open={contOpen === index}>
                                                             <AccordionHeader onClick={() => handleContOpen(index)} className='text-md font-semibold flex place-items-center gap-1 capitalize font-poppins'>
-                                                                <h2 className='flex gap-3 place-items-center text-start'>{ Lecture.type==="Lecture" ? <MdOndemandVideo size={20}></MdOndemandVideo> : Lecture.type==="Quiz" ? <AiOutlineBulb size={20}></AiOutlineBulb> : <HiDocumentDuplicate size={20}></HiDocumentDuplicate> } {Lecture.title}<span className='border-l-2 border-primary px-1'>{Lecture.type}</span></h2>
+                                                                <div className=' place-content-between flex w-full'>
+                                                                <div><h2 className='flex gap-3 place-items-center text-start'>{ Lecture.type==="Lecture" ? <MdOndemandVideo size={20}></MdOndemandVideo> : Lecture.type==="Quiz" ? <AiOutlineBulb size={20}></AiOutlineBulb> : <HiDocumentDuplicate size={20}></HiDocumentDuplicate> } {Lecture.title}<span className='border-l-2 border-primary px-1'>{Lecture.type}</span></h2></div>
+                                                                <div>
+                                                                <CiEdit size={25}></CiEdit>
+                                                                </div>
+                                                                </div>
                                                             </AccordionHeader>
                                                             <AccordionBody className="font-poppins">
                                                                 {Lecture.description}
@@ -215,19 +218,19 @@ export default function AsingleCourse() {
                                                                   :
                                                                   <p>Assignment</p>
                                                                 } */}
-                                                                {
+
+{
                                                                 Lecture.type ==="lecture" ?
                                                                 <div className='w-full p-3 flex gap-3 place-items-center'>
                                                                     <RiVideoFill size={20}></RiVideoFill>
-                                                                    <a className='text-black font-semibold font-poppins text-md' href={details.base_url+Lecture?.material} rel='noreferrer' target="_blank">Preview</a>
+                                                                    <a className='text-black font-semibold font-poppins text-md' href={details+Lecture?.material} rel='noreferrer' target="_blank">Preview</a>
                                                                 </div>
                                                                 :
                                                                 <div className='w-full p-3 flex gap-3 place-items-center'>
                                                                     <HiDocumentDuplicate size={20}></HiDocumentDuplicate>
-                                                                    <a className='text-black font-semibold font-poppins text-md' href={details.base_url+Lecture?.material} rel='noreferrer' target="_blank">Preview</a>
+                                                                    <a className='text-black font-semibold font-poppins text-md' href={details+Lecture?.material} rel='noreferrer' target="_blank">Preview</a>
                                                                 </div>
                                                                 }
-                                                                
                                                             </AccordionBody>
                                                         </Accordion>
                                                         
@@ -243,6 +246,20 @@ export default function AsingleCourse() {
                                 
                             
                             </div>
+                                <div className=' flex place-content-center place-items-center pt-5'>
+                                    <button className='bg-cards rounded-lg text-center px-5 py-2 text-black text-light' onClick={()=>setToggle({add:true})}>Add Sesion</button>
+                                </div>
+                            </TabPanel>
+
+                            <TabPanel key="materials" value="materials">
+
+                            <div className="w-full flex flex-col gap-3">
+                                
+                            
+                            </div>
+                                <div className=' flex w-full place-content-center place-items-center pt-5'>
+                                    <button className='bg-cards rounded-lg text-center px-5 py-2 text-black text-light' onClick={()=>setToggle({addmaterial:true})}>Add Material</button>
+                                </div>
                             </TabPanel>
                         
                         </TabsBody>
@@ -251,7 +268,10 @@ export default function AsingleCourse() {
                 </div>
             </div>
             </div>
+            {
+                toggle.add ? <AddSession setToggle={setToggle} SingleCourse={SingleCourse.id} getCourse={getCourse}/> :toggle.addmaterial ? <AddMaterial setToggle={setToggle} SingleCourse={SingleCourse.id} getCourse={getCourse}/> : null
+            }
         </div>
     </div>
-  )
+  ) 
 }

@@ -33,7 +33,7 @@ function TutorLogin() {
             localStorage.setItem('tutor_id', res.data.tutor_id);
             window.location.href = '/dashboards';
           } else {
-            toast.error('something went wrong');
+            toast.error('Entered password is incorrect');
           }
         });
     } catch (error) {

@@ -103,7 +103,7 @@ export default function Rating() {
 
                     </div>
                     
-                    <button className='bg-black text-white px-5 py-2' type='submit'>Submit</button>
+                    <button className='bg-black text-black px-5 py-2' type='submit'>Submit</button>
                 </form>
             </div>
         </div>

@@ -75,7 +75,7 @@ function TutorRegister() {
   return (
     <div className="bg-gradient h-screen w-screen flex items-center justify-center">
        <Toaster position="top-center" reverseOrder={false}/>
-      <div className="h-5/6 w-10/12 flex flex-row bg-gradient-to-r from-yellow-50 to-pink-200">
+       <div className=" h-5/6 w-10/12 flex flex-row bg-gradient-to-r from-white  to-gray-300 rounded-3xl">
         <div className="h-full w-3/6 flex items-center justify-center">
           <img src={register} alt="Login" />
         </div>

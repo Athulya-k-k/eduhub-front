@@ -48,11 +48,14 @@ export default function Cart() {
       confirmButtonText: 'Yes, delete it!',
     }).then(result => {
       if (result.isConfirmed) {
-        axios.delete(`${BASE_URL}cart/removecart/${id}`).then(getCart());
-        toast.success('Removed');
+        axios.delete(`${BASE_URL}cart/removecart/${id}`).then(() => {
+          getCart(); // Fetch the cart after the item is successfully deleted
+          toast.success('Removed');
+        });
       }
     });
   }
+  
 
   const handleCheckout = () => {
     if (user_auth) {

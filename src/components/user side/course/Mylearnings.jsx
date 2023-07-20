@@ -1,6 +1,6 @@
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
-import NavBar from '../navbar/Navbar'
+import Navbar from '../navbar/Navbar'
 import { useState,useEffect } from 'react'
 import instance from '../../../utils/axios';
 import jwtDecode from 'jwt-decode';
@@ -36,8 +36,9 @@ export default function Mylearnings() {
   return (
 <div className='w-full h-full font-poppins relative'>
         <Toaster position='top-center' reverseOrder='false' ></Toaster>
+        <Navbar/>
         <div className="w-full h-56 bg-cover bg-whie">
-            <NavBar/>
+       
             <div className="w-full py-10  flex flex-col place-content-center place-items-center">
                 <div className="w-4/5">
                     <h2 className='text-3xl font-semibold text-black '>My Learnings</h2>

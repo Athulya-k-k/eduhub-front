@@ -4,6 +4,8 @@ import axios, { formToJSON } from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import instance, { BASE_URL } from "../../utils/axios";
+import { Link } from "react-router-dom";
+import { AiFillEye } from 'react-icons/ai';
 import Pagination from "../Pagination";
 import {
   Button,
@@ -19,7 +21,7 @@ import { useRef } from 'react';
 function Coursetutor() {
   const [courses, setCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(2);
+  const [postsPerPage, setPostsPerPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState([]);
   const [editMode, setEditMode] = useState(false);
@@ -190,7 +192,9 @@ console.log(formData,'asdfghj');
   const handleButtonClick = () => {
     navigate("/createcourse");
   };
-
+  const handleButtonClicks = () => {
+    navigate('/singlecoursedetail/'); 
+  };
   const getCourses = async () => {
     try {
       const response = await instance.get("courses/course/");
@@ -300,6 +304,12 @@ console.log(courses);
                   >
                     Actions
                   </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-4 font-large text-gray-900"
+                  >
+                    View
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 border-t border-gray-100">
@@ -350,6 +360,8 @@ console.log(courses);
                         Edit
                       </Button>
                       </div>
+                    </td>
+                    <td>   <Link className='action-text' to={`/singlecoursedetail/${course?.id}`} ><p className='edit'><AiFillEye /> View</p></Link>
                     </td>
                     
                   </tr>

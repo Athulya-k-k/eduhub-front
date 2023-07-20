@@ -52,7 +52,7 @@ function Register() {
     }
 
     if (password !== password2) {
-    toast.e("Passwords do not match.");
+    toast.error("Passwords do not match.");
       return;
     }
   
@@ -73,14 +73,14 @@ function Register() {
         toast.error("Something went wrong");
       }
     } catch(error) {
-      toast.error("Password did't match");
+      toast.error("User with same email id already occured");
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-f6c2f9 to-819ff9 h-screen w-screen flex items-center justify-center">
+    <div className="bg-gradient-to-br  h-screen w-screen flex items-center justify-center">
         <Toaster position="top-center" reverseOrder={false}/>
-      <div className=" h-5/6 w-10/12 flex flex-row bg-gradient-to-r from-yellow-50 to-pink-200 ">
+        <div className=" h-5/6 w-10/12 flex flex-row bg-gradient-to-r from-white  to-gray-300 rounded-3xl">
         <div className=" h-full w-3/6  flex items-center justify-center">
           <img src={register} alt="Login" />
         </div>
