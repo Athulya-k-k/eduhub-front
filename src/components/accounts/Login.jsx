@@ -72,7 +72,7 @@ function Login() {
         <div className=" h-full w-3/6 flex items-center justify-center  ">
           <div className="bg-white h-5/6  w-4/6 rounded-3xl ">
             <h1 className="font-serif text-3xl text-custom-red mt-24 px-24 font-bold">
-              USER LOGIN
+              USER LOGIN.
             </h1>
           <form onSubmit={handleSubmit}>
             <input
