@@ -6,7 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
 import register from "../../images/register.png";
 
-const baseUrl = 'http://localhost:8000/api-tutor/tutor/';
+const baseUrl = 'https://eduhub-kof9.onrender.com/api-tutor/tutor/';
 
 function TutorRegister() {
   const [teacherData, setTeacherData] = useState({

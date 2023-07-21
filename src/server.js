@@ -1,1 +1,1 @@
-export const server = "http://localhost:8000/";
+export const server = "https://eduhub-kof9.onrender.com";

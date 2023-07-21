@@ -1,13 +1,13 @@
 import axios from "axios";
 export const details = {
-    base_url : ' http://localhost:8000/',
+    base_url : ' https://eduhub-kof9.onrender.com',
     
    
 }
 
-export const BASE_URL = ' http://localhost:8000/'
+export const BASE_URL = ' https://eduhub-kof9.onrender.com'
  const instance = axios.create({
-    baseURL: ' http://localhost:8000/',
+    baseURL: ' https://eduhub-kof9.onrender.com',
     // timeout: 1000,
     headers :{
         'Content-Type' :'application/json'
