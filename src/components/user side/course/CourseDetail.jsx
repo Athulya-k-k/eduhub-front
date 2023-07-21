@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../../../utils/axios';
+import instance from '../../../utils/axios';
 import { Toaster, toast } from 'react-hot-toast';
 import NavBar from '../navbar/Navbar';
 import { BsBook, BsClockHistory } from 'react-icons/bs';
@@ -35,7 +35,7 @@ export default function SingleCourse() {
   const [Cart, setCart] = useState(false);
   const [Active, setActive] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
-  const [Review, setReview] = useState([]);
+  
 
   useEffect(() => {
     getCourse();
@@ -53,17 +53,17 @@ export default function SingleCourse() {
   }
 
   async function getCourse() {
-    const response = await axios.get(`${BASE_URL}courses/singlecourse/${course_id.id}`);
-    const user_response = await axios.get(`${BASE_URL}courses/singleuser/${course_id.id}`);
-    const review_response = await axios.get(`${BASE_URL}learning/getreview/${course_id.id}`);
+    const response = await instance.get(`courses/singlecourse/${course_id.id}`);
+    const user_response = await instance.get(`courses/singleuser/${course_id.id}`);
+   
 
-    setReview(review_response.data);
+   
     setSingleCourse(response.data);
     setSingleuser(user_response.data);
 
     if (user_name) {
-      const cart_response = await axios.get(`${BASE_URL}cart/carts/${user_name.user_id}`);
-      const course_response = await axios.get(`${BASE_URL}courses/mycourse/${user_name.user_id}`);
+      const cart_response = await instance.get(`cart/carts/${user_name.user_id}`);
+      const course_response = await instance.get(`courses/mycourse/${user_name.user_id}`);
       const is_enrolled = course_response.data.find(item => item?.course.id === response.data?.id);
       const is_cart = cart_response.data.find(item => item?.course === response.data?.id);
       setActive(is_cart);
@@ -102,9 +102,9 @@ export default function SingleCourse() {
   const addCart = async (e, user, course, price) => {
     e.preventDefault();
 
-    const res = await axios({
+    const res = await instance({
       method: 'post',
-      url: `${BASE_URL}cart/addcart/`,
+      url: `cart/addcart/`,
       data: { user, course, price },
     });
     console.log(res);
@@ -256,26 +256,7 @@ export default function SingleCourse() {
                   <p className="text-lg text-gray-600 pt-3">2+ Year Experience Python-Django Full-stack developer with high specialization in React Js</p>
                 </div>
               </TabPanel>
-              <TabPanel key="reviews" value="reviews">
-                {Review.length === 0 ? (
-                  <div className="w-full place-content-center place-items-center flex mt-4">
-                    <h3 className="text-black font-semibold text-xl">No reviews to show</h3>
-                  </div>
-                ) : (
-                  Review?.map((review, index) => (
-                    <div className="flex w-full mb-3 bg-gray-100 px-5 rounded-xl flex-col" key={index}>
-                      <div className="m-5 flex flex-row gap-5">
-                        <img className="w-14 rounded-xl" src="/avatar1.avif" alt="User Profile" />
-                        <p className="font-bold mt-4">{review.user.username}</p>
-                        <p className="font-bold mt-4">{review.rating}/5</p>
-                      </div>
-                      <div className="m-5">
-                        <p>{review.discription}</p>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </TabPanel>
+              
             </TabsBody>
           </Tabs>
         </div>

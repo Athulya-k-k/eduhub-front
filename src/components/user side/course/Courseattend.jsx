@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import { BASE_URL } from '../../../utils/axios'
+import instance from '../../../utils/axios'
 import {AiOutlineCloseCircle} from 'react-icons/ai'
 import { Tabs, TabsHeader, Accordion, AccordionBody, AccordionHeader, Tab, TabPanel, TabsBody } from '@material-tailwind/react'
 import ReactPlayer from 'react-player'
@@ -22,10 +22,10 @@ export default function Courseattend() {
     const [Sessions, setSessions] = useState([])
     const [Lecture, setLecture] = useState([])
     const [video,setVideo] = useState('')
-    const [reviews,Setreviews] = useState([])
-    const [Progress,SetProgress] = useState('')
+ 
+  
     const user_auth = getLocal('authToken');
-    const [current,setCurrent] = useState({})
+   
 
 
     let user_name;
@@ -39,26 +39,13 @@ export default function Courseattend() {
 
     async function getCourse() {
         // const initial = lecture_response.data?.find(item=>item.type==="lecture")
-        const response = await axios.get(`${BASE_URL}courses/singlecourse/${course_id.id}`)
-        const session_response = await axios.get(`${BASE_URL}csession/session/${course_id.id}`)
-        const lecture_response = await axios.get(`${BASE_URL}csession/lectures/${course_id.id}`)
+        const response = await instance.get(`courses/singlecourse/${course_id.id}`)
+        const session_response = await instance.get(`csession/session/${course_id.id}`)
+        const lecture_response = await instance.get(`csession/lectures/${course_id.id}`)
         console.log(lecture_response)
         
 
-        const progress_response = await axios.get(`${BASE_URL}learning/progress/${course_id.id}/${user_name.user_id}`)
-
-        const getprogress = await axios.get(`${BASE_URL}learning/getprogress/${course_id.id}/${user_name.user_id}`)
-        SetProgress(getprogress.data)
-
-        const review_response = await axios.get(`${BASE_URL}learning/getreview/${course_id.id}`)
-        Setreviews(review_response.data)
-
-        const current_lect = progress_response.data?.find(item=>item.is_active)
-        setCurrent(current_lect?.lecture)
-        console.log(current_lect?.lecture)
-
-        const initial = progress_response.data?.find(item=>item.is_active && item.lecture.type==="lecture")
-        setVideo(initial?.lecture?.material)
+      
 
         setLecture(lecture_response.data)
         setSessions(session_response.data)
@@ -81,8 +68,7 @@ export default function Courseattend() {
 
 
     async function handleVideoEnded(){
-        const progress = await axios.get(`${BASE_URL}learning/progressupdate/${course_id.id}/${user_name.user_id}`)
-        console.log(progress.data)
+        const progress = await instance.get(`learning/progressupdate/${course_id.id}/${user_name.user_id}`)
         getCourse();
     }
 

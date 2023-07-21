@@ -3,7 +3,7 @@ import { Toaster,toast } from 'react-hot-toast'
 import {AiOutlineCloseCircle} from 'react-icons/ai'
 import { useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../../utils/axios';
+import instance from '../../utils/axios';
 import { useEffect } from 'react';
 
 
@@ -25,8 +25,8 @@ export default function AddMaterial(props) {
 
 
     async function getCourse() {
-        const response = await axios.get(`${BASE_URL}courses/singlecourse/${props.SingleCourse}`)
-        const session_response = await axios.get(`${BASE_URL}csession/session/${props.SingleCourse}`)
+        const response = await instance.get(`courses/singlecourse/${props.SingleCourse}`)
+        const session_response = await instance.get(`csession/session/${props.SingleCourse}`)
 
         setSingleCourse(response.data)
         setSessions(session_response.data)
@@ -46,9 +46,9 @@ export default function AddMaterial(props) {
 
         console.log(...form)
     
-        const res = await axios({
+        const res = await instance({
           method: 'post',
-          url: `${BASE_URL}csession/addmaterial/`,
+          url: `csession/addmaterial/`,
           data: form
         })
         console.log(res);

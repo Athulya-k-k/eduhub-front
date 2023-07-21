@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import axios, { formToJSON } from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import instance, { BASE_URL } from "../../utils/axios";
+import instance from "../../utils/axios";
 import { Link } from "react-router-dom";
 import { AiFillEye } from 'react-icons/ai';
 import Pagination from "../Pagination";
@@ -151,8 +151,8 @@ console.log(formData,'asdfghj');
 
   const updateCourse = async (id, formData) => {
     try {
-      const response = await axios.put(
-        `${BASE_URL}courses/update-course/${id}`,
+      const response = await instance.put(
+        `courses/update-course/${id}`,
         formData,
         {
           headers: {
@@ -171,8 +171,8 @@ console.log(formData,'asdfghj');
   const deleteCourse = async (id) => {
     console.log(id);
     try {
-      const response = await axios.delete(
-        `${BASE_URL}courses/delete-course/${id}`
+      const response = await instance.delete(
+        `courses/delete-course/${id}`
       );
       getCourses();
       toast.success("Course deleted successfully");

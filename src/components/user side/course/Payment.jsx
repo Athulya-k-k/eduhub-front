@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../navbar/Navbar';
 import jwtDecode from 'jwt-decode';
 import { getLocal } from '../../../helpers/auth';
-import { BASE_URL } from '../../../utils/axios';
+import instance from '../../../utils/axios';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
@@ -24,7 +24,7 @@ export default function Checkout() {
   }, []);
 
   async function getCart() {
-    const cart_response = await axios.get(`${BASE_URL}cart/getcarts/${user_name.user_id}`);
+    const cart_response = await instance.get(`cart/getcarts/${user_name.user_id}`);
     const cartItems = cart_response.data.data;
     setCart(cartItems);
     calculateSubtotal(cartItems);
@@ -45,7 +45,7 @@ export default function Checkout() {
       bodyData.append('response', JSON.stringify(response));
       bodyData.append('user', user_name.user_id);
 
-      const res = await axios.post(`${BASE_URL}payment/success/`, bodyData, {
+      const res = await instance.post(`payment/success/`, bodyData, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -80,8 +80,8 @@ export default function Checkout() {
     bodyData.append("user", user_name.user_id);
    
 
-    const data = await axios({
-      url: `${BASE_URL}payment/pay/`,
+    const data = await instance({
+      url: `payment/pay/`,
       method: "POST",
       headers: {
         Accept: "application/json",

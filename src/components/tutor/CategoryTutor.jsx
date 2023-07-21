@@ -6,7 +6,7 @@ import instance from "../../utils/axios";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from '../../utils/axios';
+
 import {
   Button,
   Dialog,
@@ -67,7 +67,7 @@ function Categories() {
       formData.append("description", selectedCategory.description);
       formData.append("image", selectedCategory.image);
 
-      const response = await axios.put(`${BASE_URL}courses/update-category/${selectedCategory.id}`, formData);
+      const response = await instance.put(`courses/update-category/${selectedCategory.id}`, formData);
 
       if (response.status === 200) {
         toast.success('Category updated successfully');

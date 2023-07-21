@@ -58,17 +58,7 @@ export default function Profilesidebar() {
               : "flex place-items-center bg-white-10 my-2"
           }
         >
-          <SlGraduation size={50} className="px-3"></SlGraduation>
-          <h3 className="font-semibold">Order History</h3>
-        </NavLink>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive
-              ? "bg-cards rounded-xl flex place-items-center text-black my-2"
-              : "flex place-items-center bg-white-10 my-2"
-          }
-        >
+         
           <SlGraduation size={50} className="px-3"></SlGraduation>
           <h3 className="font-semibold">Back</h3>
         </NavLink>

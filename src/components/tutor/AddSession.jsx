@@ -3,7 +3,6 @@ import { Toaster,toast } from 'react-hot-toast'
 import {AiOutlineCloseCircle} from 'react-icons/ai'
 import { useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../../utils/axios';
 import { useEffect } from 'react';
 import instance from '../../utils/axios';
 import { useNavigate } from 'react-router-dom';
@@ -47,9 +46,9 @@ export default function AddSession(props) {
         form.append('title', Title)
         form.append('description', Description)
     
-        const res = await axios({
+        const res = await instance({
           method: 'post',
-          url: `${BASE_URL}csession/addsession/`,
+          url: `csession/addsession/`,
           data: form
         })
         console.log(res);
