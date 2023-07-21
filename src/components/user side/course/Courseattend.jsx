@@ -228,14 +228,7 @@ export default function Courseattend() {
                                                   </AccordionHeader>
                                                   <AccordionBody className="font-poppins">
                                                       {Lecture.description}
-                                                      {/* {Lecture.type==="Lecture"?
-                                                        <p>Vedio</p>
-                                                        :
-                                                        Lecture.type==="Quiz" ?
-                                                        <p>Quiz</p>
-                                                        :
-                                                        <p>Assignment</p>
-                                                      } */}
+                                                     
                                                       {
                                                       Lecture.type ==="lecture" ?
                                                       <div className='w-full p-3 flex gap-3 place-items-center' onClick={() =>setVideo(Lecture?.material)}>
@@ -245,7 +238,7 @@ export default function Courseattend() {
                                                       :
                                                       <div className='w-full p-3 flex gap-3 place-items-center'>
                                                           <HiDocumentDuplicate size={20}></HiDocumentDuplicate>
-                                                          <a className='text-black font-semibold font-poppins text-md' href={details+Lecture?.material} onClick={handleVideoEnded} rel='noreferrer' target="_blank">Watch</a>
+                                                          <a className='text-black font-semibold font-poppins text-md' href={details.base_url+Lecture?.material} onClick={handleVideoEnded} rel='noreferrer' target="_blank">Watch</a>
                                                       </div>
                                                       }
                                                       

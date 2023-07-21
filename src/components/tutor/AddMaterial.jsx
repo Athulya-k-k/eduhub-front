@@ -53,7 +53,7 @@ export default function AddMaterial(props) {
         })
         console.log(res);
         if (res.status === 200) {
-          toast.success('Session Added')
+          toast.success('Material Added')
           props.getCourse()
           props.setToggle({add:false})
         } else {
