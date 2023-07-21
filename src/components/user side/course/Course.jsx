@@ -20,6 +20,7 @@ function Course() {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchKey = searchParams.get("key");
   const [showAllCourses, setShowAllCourses] = useState(true);
+  const [load,setLoad]=useState(false)
 
   const handleCategoryFilter = (categoryName) => {
     setSelectedCategory(categoryName);
@@ -33,10 +34,12 @@ function Course() {
 
   useEffect(() => {
     async function getCourse() {
+    setLoad(true)
       const response = await instance.get('/courses/course/');
       const allCourses = response.data;
-
+      setLoad(false)
       if (searchKey) {
+       
         // Filter courses based on searchKey
         const filteredCourses = allCourses.filter(course =>
           course.title.toLowerCase().includes(searchKey.toLowerCase())
@@ -131,6 +134,9 @@ function Course() {
             )}
           </div>
           <div className="w-full mt-10">
+            {load ? <h1>Loading</h1> : <>
+
+         
             <h3 className='text-lg font-normal pl-2'>{courses.length} results</h3>
             {courses?.length > 0 ? (
               currentCourses.map(course => (
@@ -160,6 +166,7 @@ function Course() {
                 <p className='text-xl font-semibold'>No matching results found</p>
               </div>
             )}
+               </>}
           </div>
         </div>
       </div>
