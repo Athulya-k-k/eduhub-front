@@ -130,9 +130,7 @@ export default function Courseattend() {
                                           Overview
                                       </Tab>
                                       
-                                      <Tab key="instructor" value="instructor" className='font-normal font-poppins py-3'>
-                                          Instructor
-                                      </Tab>
+                                    
                                     
 
                                   </TabsHeader>
@@ -148,22 +146,7 @@ export default function Courseattend() {
                                       <TabPanel key="curriculum" value="curriculum">
                                         
                                       </TabPanel>
-                                      <TabPanel key="instructor" value="instructor">
-                                          <div className="w-full shadow-lg p-5  h-36 rounded-xl">
-                                              <div className="flex gap-2 place-items-center">
-                                                  <div className="w-20">
-                                                      <img className='w-14 h-14' src= '/avatar.png'  alt="tutor_profile"/>
-                                                  </div>
-                                                  <div className="flex flex-col gap-3 place-content-start">
-                                                      <h1 className='flex gap-3 font-poppins text-xl font-semibold text-black'>{singlecourse?.user?.first_name} {singlecourse?.user?.last_name}</h1>
-                                                  </div>
-                                              </div>
-                                              <div className="p-5">
-                                                  <p className='text-sm text-gray-600 '>Helloooooooooooooooo welcome </p>
-                                              </div>
-                                              
-                                          </div>
-                                      </TabPanel>
+                                    
                                       <TabPanel key="notes" value="notes">
                                           <div className="w-full h-96">
                                               
