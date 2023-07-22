@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { AiOutlineCloseSquare } from 'react-icons/ai';
 import axios from 'axios';
-import { BASE_URL } from '../../../utils/axios';
+import instance from '../../../utils/axios';
 import jwtDecode from 'jwt-decode';
 import { getLocal } from '../../../helpers/auth';
 import { toast } from 'react-hot-toast';
@@ -28,7 +28,7 @@ export default function Cart() {
 
   async function getCart() {
     if (user_name) {
-      const cart_response = await axios.get(`${BASE_URL}cart/getcarts/${user_name.user_id}`);
+      const cart_response = await instance.get(`cart/getcarts/${user_name.user_id}`);
       setCart(cart_response.data.data);
       calculateTotal(cart_response.data.data); // Calculate total when cart data is fetched
     } else {
@@ -48,7 +48,7 @@ export default function Cart() {
       confirmButtonText: 'Yes, delete it!',
     }).then(result => {
       if (result.isConfirmed) {
-        axios.delete(`${BASE_URL}cart/removecart/${id}`).then(() => {
+        instance.delete(`cart/removecart/${id}`).then(() => {
           getCart(); // Fetch the cart after the item is successfully deleted
           toast.success('Removed');
         });

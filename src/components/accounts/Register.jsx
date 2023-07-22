@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
-// import { BASE_URL } from "../../utils/axios";
 import register from "../../images/register.png";
 import instance from '../../utils/axios';
 

@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import instance from "../../utils/axios";
 import axios from 'axios';
 import {ToastContainer,toast } from 'react-toastify';
-import { BASE_URL } from '../../utils/axios';
 import {
   Button,
   Dialog,
@@ -54,7 +53,7 @@ const deleteCategory = async (id) => {
   console.log(id);
   try {
 
-    const response = await axios.delete(`${BASE_URL}courses/delete-category/${id}/`);
+    const response = await instance.delete(`courses/delete-category/${id}/`);
     getCategory();
     toast.success('Course deleted successfully');
     handleClose();

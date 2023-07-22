@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate,useLocation } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
-import { BASE_URL } from "../../utils/axios";
 import axios from 'axios'
 import login,{getLocal} from "../../helpers/auth";
 import Loginimage from "../../images/login.png";

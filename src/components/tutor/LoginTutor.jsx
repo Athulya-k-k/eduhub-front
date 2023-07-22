@@ -4,8 +4,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Loginimage from "../../images/login.png";
 import { toast, Toaster } from "react-hot-toast";
 
-const baseUrl = 'https://eduhub-kof9.onrender.com/api-tutor';
-
 function TutorLogin() {
   const [teacherLoginData, setteacherLoginData] = useState({
     email: '',
@@ -25,7 +23,7 @@ function TutorLogin() {
     teacherFormData.append('password', teacherLoginData.password);
     
     try {
-      axios.post(baseUrl + '/teacherlogin/', teacherFormData)
+      instance.post('api-tutor/teacherlogin/', teacherFormData)
         .then((res) => {
           // console.log(res);
           if (res.data.bool === true) {

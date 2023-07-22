@@ -30,7 +30,6 @@ import Profile from "./components/accounts/Profile";
 import ProfileSide from './components/accounts/ProfileSide'
 import ChangePassword from './components/accounts/ChangePassword'
 import Courseattend from "./components/user side/course/Courseattend";
-import Rating from "./components/user side/course/Rating";
 import Cart from "./components/user side/course/Cart";
 import AddMaterial from './components/tutor/AddMaterial'
 import AddSession from "./components/tutor/AddSession";
@@ -73,7 +72,7 @@ function App() {
           <Route path='/profileside' Component={ProfileSide}/>
           <Route path='/passwordchange' Component={ChangePassword}/>
         
-          <Route path='ratings' element={<Rating/>}/>
+        
           <Route path='/cart' Component={Cart}/>
           <Route path='/attendcourse/:id' element={<Courseattend/>}/>
           <Route path='/addmaterial' Component={AddMaterial}/>

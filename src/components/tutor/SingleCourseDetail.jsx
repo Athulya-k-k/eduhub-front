@@ -4,7 +4,7 @@ import Sidebar from './Sidebar'
 import { Toaster } from 'react-hot-toast'
 import { useState,useEffect } from 'react'
 import axios from 'axios'
-import { BASE_URL } from '../../utils/axios'
+import instance from '../../utils/axios'
 import { details } from '../../utils/axios'
 import { useNavigate } from 'react-router-dom'
 import AddSession from './AddSession'
@@ -44,9 +44,9 @@ export default function InstructorSingleCourse() {
     }, [])
 
     async function getCourse() {
-        const response = await axios.get(`${BASE_URL}courses/singlecourse/${course_id.id}`)
-        const session_response = await axios.get(`${BASE_URL}csession/session/${course_id.id}`)
-        const lecture_response = await axios.get(`${BASE_URL}csession/lectures/${course_id.id}`)
+        const response = await instance.get(`courses/singlecourse/${course_id.id}`)
+        const session_response = await instance.get(`csession/session/${course_id.id}`)
+        const lecture_response = await instance.get(`csession/lectures/${course_id.id}`)
 
         setLecture(lecture_response.data)
         setSingleCourse(response.data)
@@ -99,7 +99,7 @@ export default function InstructorSingleCourse() {
             confirmButtonText: 'Yes!'
           }).then((result) => {
             if (result.isConfirmed) {
-                axios.get(`${BASE_URL}courses/resubmit/${id}`).then(
+                instance.get(`courses/resubmit/${id}`).then(
                     getCourse()
                 )
                 getCourse()

@@ -1,1 +1,1 @@
-export const server = "https://eduhub-kof9.onrender.com/";
+export const server = process.env.REACT_APP_BASE_URL;
