@@ -61,12 +61,17 @@ function Categories() {
 
   const handleEdit = async () => {
     try {
+      console.log(selectedCategory)
       const formData = new FormData();
       formData.append("name", selectedCategory.name);
       formData.append("description", selectedCategory.description);
       formData.append("image", selectedCategory.image);
 
-      const response = await instance.put(`courses/update-category/${selectedCategory.id}`, formData);
+      const response = await instance.put(`courses/update-category/${selectedCategory.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.status === 200) {
         toast.success('Category updated successfully');
@@ -79,6 +84,7 @@ function Categories() {
       toast.error('Failed to update category');
     }
   };
+  // console.log(selectedCategory)
 
   return (
     <div className="flex h-full bg-acontent overflow-hidden">

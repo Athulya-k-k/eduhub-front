@@ -1,102 +1,57 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Toaster, toast } from 'react-hot-toast'
-import { useState,useEffect } from 'react'
 import axios from 'axios'
 import instance from '../../../utils/axios'
-import { details } from '../../../utils/axios'
-import { useNavigate } from 'react-router-dom'
+import {AiOutlineCloseCircle} from 'react-icons/ai'
+import { Tabs, TabsHeader, Accordion, AccordionBody, AccordionHeader, Tab, TabPanel, TabsBody } from '@material-tailwind/react'
+import ReactPlayer from 'react-player'
 import { MdOndemandVideo } from 'react-icons/md'
 import { AiOutlineBulb } from 'react-icons/ai'
 import { HiDocumentDuplicate } from 'react-icons/hi'
-
+import { details } from '../../../utils/axios'
 import {RiVideoFill} from 'react-icons/ri'
-import Swal from 'sweetalert2'
 
-
-import {
-    Tabs,
-    TabsHeader,
-    TabsBody,
-    Tab,
-    TabPanel,
-    Accordion,
-    AccordionHeader,
-    AccordionBody,
-  } from "@material-tailwind/react";
+import jwtDecode from 'jwt-decode';
+import { getLocal } from '../../../helpers/auth';
 
 
 
-export default function AsingleCourse() {
+export default function Courseattend() {
     const course_id = useParams()
-    
-    const [SingleCourse, setSingleCourse] = useState({})
+    const [singlecourse,setSinglecourse] = useState({})
     const [Sessions, setSessions] = useState([])
     const [Lecture, setLecture] = useState([])
+    const [video,setVideo] = useState('')
+ 
+  
+    const user_auth = getLocal('authToken');
+   
 
-    const CourseApprove = (id) => {
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Change Status....!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-                instance.get(`courses/blockcourse/${id}`).then(
-                    getCourse()
-                )
-                getCourse()
-                toast.success("Success")
-            }
-        })
+    let user_name;
+    if(user_auth){
+        user_name = jwtDecode(user_auth)
     }
-
-
-
-    const CourseReject = (id) => {
-
-        Swal.fire({
-            title: 'Are you sure?',
-            input: 'text',
-            text: "Pls Enter the Message",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!',
-
-            preConfirm:(message) =>{
-                console.log(`message: ${message}`);
-                instance.get(`courses/rejectcourse/${message}/${id}`).then(
-                    getCourse()
-                )
-                getCourse()
-                toast.success("Success")
-            },
-
-        });
-
-    }
-
 
     useEffect(() => {
         getCourse();
     }, [])
 
     async function getCourse() {
+        // const initial = lecture_response.data?.find(item=>item.type==="lecture")
         const response = await instance.get(`courses/singlecourse/${course_id.id}`)
         const session_response = await instance.get(`csession/session/${course_id.id}`)
         const lecture_response = await instance.get(`csession/lectures/${course_id.id}`)
+        console.log(lecture_response)
+        
+
+      
 
         setLecture(lecture_response.data)
-        setSingleCourse(response.data)
         setSessions(session_response.data)
-    }
+        setSinglecourse(response.data)
 
+    }
 
     const [open, setOpen] = useState(0);
 
@@ -104,10 +59,17 @@ export default function AsingleCourse() {
     const handleOpen = (value) => {
         setOpen(open === value ? 0 : value);
     }
+
     const [contOpen, setContOpen] = useState(0);
     
     const handleContOpen = (value) => {
         setContOpen(contOpen === value ? 0 : value);
+    }
+
+
+    async function handleVideoEnded(){
+        const progress = await instance.get(`learning/progressupdate/${course_id.id}/${user_name.user_id}`)
+        getCourse();
     }
 
     function Icon({ id, open }) {
@@ -127,130 +89,159 @@ export default function AsingleCourse() {
         );
     }
 
-
   return (
-<div className='flex h-full bg-acontent'>
-        <Toaster position='top-center' reverseOrder='false' ></Toaster>
-      
-        <div className='px-5 w-full h-auto min-h-screen mx-5 mt-2  py-8 font-poppins flex flex-col         place-content-start place-items-center bg-white shadow-xl rounded-xl'>
-            <div className='flex place-content-between place-items-center w-full h-14'>
-                <div>
-                    <h2 className='font-semibold font-poppins text-primaryBlue text-xl'>Course Details</h2>
-                </div>
-              
-                
-                
-            </div>
-           
+    <div className='w-full min-h-screen'>
+      <div className='flex flex-col p-5'>
+        <div className='w-full h-40 rounded-xl flex flex-col shadow-xl overflow-hidden bg-white'>
+          <div className=' place-content-between flex'>
+              <p className=' text-black ml-5 text-xl font-bold mt-2'>{singlecourse?.title}</p>
+              <AiOutlineCloseCircle size={20} className=' mr-5 mt-3'></AiOutlineCloseCircle>
+          </div>
         
-
-            <div class="flex flex-col rounded-lg border border-gray-200 shadow-md m-5 w-full">
-                <div className="w-full h-full py-5  flex  place-content-start px-14">
-                    <div className='w-3/5 h-full pt-5 flex flex-col gap-5  place-content-start'>
-                        <h2 className='text-2xl text-black font-bold '>{SingleCourse.title}</h2>
-                        <h2 className='text-lg text-black font-normal '>{SingleCourse.subtitle}</h2>
-                    </div>
-                    <div className=' pl-10'>
-                        <div className='p-6 rounded-md w-full h-60'>
-                            <video className='w-full h-full' src={details.base_url+SingleCourse.video} controls></video>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col rounded-lg border border-gray-200 shadow-md m-5 w-full">
-            <div className='flex flex-col w-full h-full'>
-                <div className="w-full px-5 py-10 flex flex-col place-items-center">
-                    <Tabs value="overview" className="w-full px-10">
-                        <TabsHeader
-                            className="bg-transparent"
-                            indicatorProps={{
-                                className: "bg-blue-500/10 shadow-none text-blue-500",
-                            }}>
+       
+        </div>
+      </div>
+      <div className="w-full flex gap-2 h-full ">
+                    <div className="w-3/4 ml-2 flex flex-col">
+                      <ReactPlayer width="1080px" height="960px" url={details.base_url+video}  controls={true} config={{
+                        file: {
+                          attributes: {
+                              controlsList: 'nodownload'
+                          }
+                        }
+                      }}
+                      onEnded={handleVideoEnded}
+                      loop={false}
+                      />
+                      <div className='flex pr-4 w-full h-full'>
                         
-                            <Tab key="overview" value="overview" className=' font-semibold py-3'>
-                                Overview
-                            </Tab>
-                            <Tab key="curriculum" value="curriculum" className=' font-semibold py-3'>
-                                Sessions
-                            </Tab>
-                        
-                        </TabsHeader>
-                        <TabsBody>
-                            
-                            <TabPanel key="Overview" value="overview">
-                                <div className='flex w-full bg-gray-100 px-5 pt-3 pb-5 rounded-xl flex-col gap-3'>
-                                    <h1 className='text-xl font-semibold text-black'>Course Description</h1>
-                                    <p className='text-gray-700'>{SingleCourse.description}</p>
-                                </div>
-                            </TabPanel>
-                            <TabPanel key="curriculum" value="curriculum">
+                          <div className="w-full flex gap-3">
 
-                            <div className="w-full flex flex-col gap-3">
-                                {
+                              <Tabs value="overview" className="w-full h-auto mr-4">
+                                  <TabsHeader
+                                      className="bg-transparent"
+                                      indicatorProps={{
+                                          className: "bg-blue-500/10 shadow-none text-blue-500",
+                                      }}
+
+                                  >
+
+                                      <Tab key="overview" value="overview" className=' font-normal font-poppins py-3'>
+                                          Overview
+                                      </Tab>
+                                      
+                                      <Tab key="instructor" value="instructor" className='font-normal font-poppins py-3'>
+                                          Instructor
+                                      </Tab>
                                     
-                                    Sessions?.map((Session,index)=>(
+
+                                  </TabsHeader>
+                                  <TabsBody>
+
+                                      <TabPanel key="overview" value="overview">
+                                          <div className="w-full shadow-lg p-5  h-36 rounded-xl">
+                                              <h1 className='text-xl font-semibold text-black font-poppins'>Course Description</h1>
+                                              <p className='text-gray-700'>{singlecourse?.description}</p>
+                                          </div>
+                                      </TabPanel>
+
+                                      <TabPanel key="curriculum" value="curriculum">
                                         
-                                        <Accordion open={open === index} icon={<Icon id={index} open={open} />} className='bg-gray-100 rounded-xl px-5'>
-                                            <AccordionHeader onClick={() => handleOpen(index)} className='text-lg font-semibold font-poppins capitalize tracking-wider'>
-                                                {Session.title}
-                                            </AccordionHeader>
-                                            <AccordionBody>
-                                                <div className='flex flex-col gap-4'>
-                                                <p className='text-gray-600 font-light text-md font-poppins'>{Session.description}</p>
-                                                {
-                                                    Lecture?.map((Lecture,index)=>(
-                                                    
-                                                        Lecture?.session===Session?.id &&
-                                                        <Accordion open={contOpen === index}>
-                                                            <AccordionHeader onClick={() => handleContOpen(index)} className='text-md font-semibold flex place-items-center gap-1 capitalize font-poppins'>
-                                                                <h2 className='flex gap-3 place-items-center text-start'>{ Lecture.type==="Lecture" ? <MdOndemandVideo size={20}></MdOndemandVideo> : Lecture.type==="Quiz" ? <AiOutlineBulb size={20}></AiOutlineBulb> : <HiDocumentDuplicate size={20}></HiDocumentDuplicate> } {Lecture.title}<span className='border-l-2 border-primary px-1'>{Lecture.type}</span></h2>
-                                                            </AccordionHeader>
-                                                            <AccordionBody className="font-poppins">
-                                                                {Lecture.description}
-                                                                {/* {Lecture.type==="Lecture"?
-                                                                  <p>Vedio</p>
-                                                                  :
-                                                                  Lecture.type==="Quiz" ?
-                                                                  <p>Quiz</p>
-                                                                  :
-                                                                  <p>Assignment</p>
-                                                                } */}
-                                                                {
-                                                                Lecture.type ==="lecture" ?
-                                                                <div className='w-full p-3 flex gap-3 place-items-center'>
-                                                                    <RiVideoFill size={20}></RiVideoFill>
-                                                                    <a className='text-black font-semibold font-poppins text-md' href={details.base_url+Lecture?.material} rel='noreferrer' target="_blank">Preview</a>
-                                                                </div>
-                                                                :
-                                                                <div className='w-full p-3 flex gap-3 place-items-center'>
-                                                                    <HiDocumentDuplicate size={20}></HiDocumentDuplicate>
-                                                                    <a className='text-black font-semibold font-poppins text-md' href={details.base_url+Lecture?.material} rel='noreferrer' target="_blank">Preview</a>
-                                                                </div>
-                                                                }
-                                                                
-                                                            </AccordionBody>
-                                                        </Accordion>
-                                                        
-                                                    ))
-                                                }
-                                                
-                                                </div>
-                                            </AccordionBody>
-                                        </Accordion>
-                                        
-                                    ))
-                                }
-                                
-                            
-                            </div>
-                            </TabPanel>
-                        
-                        </TabsBody>
-                    </Tabs>
-                    
+                                      </TabPanel>
+                                      <TabPanel key="instructor" value="instructor">
+                                          <div className="w-full shadow-lg p-5  h-36 rounded-xl">
+                                              <div className="flex gap-2 place-items-center">
+                                                  <div className="w-20">
+                                                      <img className='w-14 h-14' src= '/avatar.png'  alt="tutor_profile"/>
+                                                  </div>
+                                                  <div className="flex flex-col gap-3 place-content-start">
+                                                      <h1 className='flex gap-3 font-poppins text-xl font-semibold text-black'>{singlecourse?.user?.first_name} {singlecourse?.user?.last_name}</h1>
+                                                  </div>
+                                              </div>
+                                              <div className="p-5">
+                                                  <p className='text-sm text-gray-600 '>Helloooooooooooooooo welcome </p>
+                                              </div>
+                                              
+                                          </div>
+                                      </TabPanel>
+                                      <TabPanel key="notes" value="notes">
+                                          <div className="w-full h-96">
+                                              
+                                          </div>
+
+                                      </TabPanel>
+                                      <TabPanel key="announcements" value="announcements">
+                                          <div className="w-full h-96">
+                                              
+                                          </div>
+
+                                      </TabPanel>
+                                   
+
+                                  </TabsBody>
+                              </Tabs>
+
+
+                          </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div className="w-1/4 flex rounded-lg flex-col bg-white mr-5 shadow-xl absolute right-0  place-items-center h-full">
+
+                        <h2 className='text-xl font-semibold text-center p-3'>Course Content</h2>
+                        <div className="w-full bg-white flex flex-col gap-3 ">
+                        {
+                                    
+                          Sessions?.map((Session,index)=>(
+                              
+                              <Accordion open={open === index} icon={<Icon id={index} open={open} />} className=' rounded-xl px-5'>
+                                  <AccordionHeader onClick={() => handleOpen(index)} className='text-lg font-semibold font-poppins capitalize tracking-wider'>
+                                      {Session.title}
+                                  </AccordionHeader>
+                                  <AccordionBody>
+                                      <div className='flex flex-col gap-4'>
+                                      {
+                                          Lecture?.map((Lecture,index)=>(
+                                          
+                                              Lecture?.session===Session?.id &&
+                                              <Accordion open={contOpen === index}>
+                                                  <AccordionHeader onClick={() => handleContOpen(index)} className='text-md font-semibold flex place-items-center gap-1 capitalize font-poppins'>
+                                                      <h2 className='flex gap-3 place-items-center text-start'>{ Lecture.type==="Lecture" ? <MdOndemandVideo size={20}></MdOndemandVideo> : Lecture.type==="Quiz" ? <AiOutlineBulb size={20}></AiOutlineBulb> : <HiDocumentDuplicate size={20}></HiDocumentDuplicate> } {Lecture.title}<span className='border-l-2 border-primary px-1'>{Lecture.type}</span></h2>
+                                                  </AccordionHeader>
+                                                  <AccordionBody className="font-poppins">
+                                                      {Lecture.description}
+                                                     
+                                                      {
+                                                      Lecture.type ==="lecture" ?
+                                                      <div className='w-full p-3 flex gap-3 place-items-center' onClick={() =>setVideo(Lecture?.material)}>
+                                                          <RiVideoFill size={20}></RiVideoFill>
+                                                          <p>Watch</p>
+                                                      </div>
+                                                      :
+                                                      <div className='w-full p-3 flex gap-3 place-items-center'>
+                                                          <HiDocumentDuplicate size={20}></HiDocumentDuplicate>
+                                                          <a className='text-black font-semibold font-poppins text-md' href={details.base_url+Lecture?.material} onClick={handleVideoEnded} rel='noreferrer' target="_blank">Watch</a>
+                                                      </div>
+                                                      }
+                                                      
+                                                  </AccordionBody>
+                                              </Accordion>
+                                              
+                                          ))
+                                      }
+                                      
+                                      </div>
+                                  </AccordionBody>
+                              </Accordion>
+                              
+                          ))
+                      }
+                      </div>
                 </div>
-            </div>
-            </div>
         </div>
     </div>
   )

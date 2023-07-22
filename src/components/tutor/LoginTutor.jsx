@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Loginimage from "../../images/login.png";
 import { toast, Toaster } from "react-hot-toast";
+import instance from "../../utils/axios";
 
 function TutorLogin() {
   const [teacherLoginData, setteacherLoginData] = useState({

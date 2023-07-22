@@ -223,12 +223,12 @@ export default function InstructorSingleCourse() {
                                                                 Lecture.type ==="lecture" ?
                                                                 <div className='w-full p-3 flex gap-3 place-items-center'>
                                                                     <RiVideoFill size={20}></RiVideoFill>
-                                                                    <a className='text-black font-semibold font-poppins text-md' href={details+Lecture?.material} rel='noreferrer' target="_blank">Preview</a>
+                                                                    <a className='text-black font-semibold font-poppins text-md' href={details+Lecture?.material} rel='noreferrer' target="_blank">view</a>
                                                                 </div>
                                                                 :
                                                                 <div className='w-full p-3 flex gap-3 place-items-center'>
                                                                     <HiDocumentDuplicate size={20}></HiDocumentDuplicate>
-                                                                    <a className='text-black font-semibold font-poppins text-md' href={details+Lecture?.material} rel='noreferrer' target="_blank">Preview</a>
+                                                                    <a className='text-black font-semibold font-poppins text-md' href={details+Lecture?.material} rel='noreferrer' target="_blank">view</a>
                                                                 </div>
                                                                 }
                                                             </AccordionBody>

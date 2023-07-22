@@ -17,6 +17,8 @@ function AddCourseForm() {
   const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const [categoryList, setCategorylist] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [previewVideo, setPreviewVideo] = useState(null);
 
   
   const navigate = useNavigate();
@@ -91,6 +93,17 @@ function AddCourseForm() {
     }
   };
 
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    setPreviewImage(URL.createObjectURL(selectedImage));
+    setImage(selectedImage);
+  };
+  const handleVideoChange = (e) => {
+    const selectedVideo = e.target.files[0];
+    setPreviewVideo(URL.createObjectURL(selectedVideo));
+    setVideo(selectedVideo);
+  };
+
   return (
     <div className="bg-gradient-to-br  h-full w-full flex items-center justify-center">
       <Toaster position="top-center" reverseOrder={false}></Toaster>
@@ -160,12 +173,19 @@ function AddCourseForm() {
           </label>
         </div>
         <input
-          className=" bg-white  h-14 w-5/12 border-2  placeholder-black  outline-none text-black  px-6 block"
+          className="bg-white h-14 w-5/12 border-2 placeholder-black outline-none text-black px-6 block"
           type="file"
           name="image"
-          onChange={(e) => setImage(e.target.files[0])}
+          onChange={handleImageChange} 
           required
         />
+        {previewImage && (
+          <img
+            src={previewImage}
+            alt="Preview"
+            className="mt-2 w-32 h-32 object-cover"
+          />
+        )}
         <div className=" w-5/12  ">
           <label className="float-left text-base" htmlFor="course">
             video
@@ -176,9 +196,17 @@ function AddCourseForm() {
           type="file"
           id="video"
           name="video"
-          onChange={(e) => setVideo(e.target.files[0])}
+          onChange={handleVideoChange} 
           required
         />
+        {previewVideo && (
+          <video 
+            src={previewVideo}
+            alt="Preview"
+            className="mt-2 w-32 h-32 object-cover"
+          />
+        )}
+         
         <div className=" w-5/12  ">
           <label className="float-left text-base" htmlFor="course">
             category
