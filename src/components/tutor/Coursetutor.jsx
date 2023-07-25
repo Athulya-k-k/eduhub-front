@@ -151,6 +151,7 @@ console.log(formData,'asdfghj');
 
   const updateCourse = async (id, formData) => {
     try {
+      
       const response = await instance.patch(
         `courses/update-course/${id}`,
         formData,
